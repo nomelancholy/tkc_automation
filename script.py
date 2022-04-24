@@ -35,7 +35,12 @@ INDEX_TITLE = split_title[0]
 # J. Rawls - Blue #2 (2001)
 TITLE = split_title[1].lstrip()
 
-CONTENT = "Cashmere The Professional가 피쳐링한 \n Cunninlynguists의 2001년 작 \n Family Ties입니다 \n \n 즐감하세요! \n \n 그간 올린 곡들은 블로그와 \n 네이버 카페 '랩잡'의 'Take Knowledge' 카테고리에서도 만나 보실 수 있습니다. \n  \n http://blog.naver.com/starmekey \n https://cafe.naver.com/rapsup"
+FEATURING = 'Cashmere The Professional (이)가 피쳐링한 \n'
+
+CONTENT = " Cunninlynguists의 2001년 작 \n Family Ties입니다 \n \n 즐감하세요! \n \n 그간 올린 곡들은 블로그와 \n 네이버 카페 '랩잡'의 'Take Knowledge' 카테고리에서도 만나 보실 수 있습니다. \n  \n http://blog.naver.com/starmekey \n https://cafe.naver.com/rapsup"
+
+if FEATURING:
+    CONTENT += FEATURING
 
 split_content = CONTENT.split('\n')
 HTML_CONTENT = ['<br />' if line == '' else "<p>"+line+"</p>" for line in split_content]
