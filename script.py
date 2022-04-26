@@ -28,16 +28,16 @@ load_dotenv(find_dotenv())
 # list = text.read().split('\\')
 
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
-FULL_TITLE = "Take Knowledge's Choice #1914. Cunninlynguists - Family Ties (2001)"
+FULL_TITLE = "Take Knowledge's Choice #1915. Ludacris - Move Bitch(2001)"
 split_title = FULL_TITLE.split('.', maxsplit=1)
 # Take Knowledge's Choice #1832
 INDEX_TITLE = split_title[0]
 # J. Rawls - Blue #2 (2001)
 TITLE = split_title[1].lstrip()
 
-FEATURING = 'Cashmere The Professional (이)가 피쳐링한 \n'
+FEATURING = 'Mystikal, I-20 (이)가 피쳐링한 \n'
 
-CONTENT = " Cunninlynguists의 2001년 작 \n Family Ties입니다 \n \n 즐감하세요! \n \n 그간 올린 곡들은 블로그와 \n 네이버 카페 '랩잡'의 'Take Knowledge' 카테고리에서도 만나 보실 수 있습니다. \n  \n http://blog.naver.com/starmekey \n https://cafe.naver.com/rapsup"
+CONTENT = "Ludacris의 2001년 작 \n Move Bitch입니다 \n \n 즐감하세요! \n \n 그간 올린 곡들은 블로그와 \n 네이버 카페 '랩잡'의 'Take Knowledge' 카테고리에서도 만나 보실 수 있습니다. \n  \n http://blog.naver.com/starmekey \n https://cafe.naver.com/rapsup"
 
 if FEATURING:
     CONTENT += FEATURING
@@ -45,9 +45,9 @@ if FEATURING:
 split_content = CONTENT.split('\n')
 HTML_CONTENT = ['<br />' if line == '' else "<p>"+line+"</p>" for line in split_content]
 
-LINK_TYPE = 'audio'
+LINK_TYPE = 'video'
 
-YOUTUBE_LINK = 'https://youtu.be/zJvzjz9U0z4'
+YOUTUBE_LINK = 'https://youtu.be/s5tAAEuyr0k'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split('/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
 def naver_process():
@@ -113,6 +113,7 @@ def naver_process():
     popup_close_button = driver.find_element_by_class_name('se-help-panel-close-button')
     popup_close_button = driver.find_element(by=By.CLASS_NAME, value='se-help-panel-close-button')
     popup_close_button.click()
+    print(popup_close_button)
     
     try:
         element = WebDriverWait(driver, 5).until(
