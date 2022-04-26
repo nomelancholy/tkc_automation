@@ -40,7 +40,7 @@ FEATURING = 'Mystikal, I-20 (이)가 피쳐링한 \n'
 CONTENT = "Ludacris의 2001년 작 \n Move Bitch입니다 \n \n 즐감하세요! \n \n 그간 올린 곡들은 블로그와 \n 네이버 카페 '랩잡'의 'Take Knowledge' 카테고리에서도 만나 보실 수 있습니다. \n  \n http://blog.naver.com/starmekey \n https://cafe.naver.com/rapsup"
 
 if FEATURING:
-    CONTENT += FEATURING
+    CONTENT = FEATURING + CONTENT
 
 split_content = CONTENT.split('\n')
 HTML_CONTENT = ['<br />' if line == '' else "<p>"+line+"</p>" for line in split_content]
@@ -289,7 +289,7 @@ def hiphople_process():
     time.sleep(2)
 
 def o_u_process():
-    driver.get("http://www.todayhumor.co.kr/")
+    driver.get(url="http://www.todayhumor.co.kr/")
 
     try:
         element = WebDriverWait(driver, 5).until(
@@ -351,8 +351,8 @@ def o_u_process():
 
     time.sleep(2)    
 
-naver_process()
+# naver_process()
 # dct_process()
 # hiphople_process()
-# o_u_process()
-# driver.quit()
+o_u_process()
+driver.quit()
