@@ -28,26 +28,28 @@ load_dotenv(find_dotenv())
 # list = text.read().split('\\')
 
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
-FULL_TITLE = "Take Knowledge's Choice #1915. Ludacris - Move Bitch(2001)"
+FULL_TITLE = "Take Knowledge's Choice #1916. 7L & Esoteric - Rep The Hardest(2001)"
 split_title = FULL_TITLE.split('.', maxsplit=1)
 # Take Knowledge's Choice #1832
 INDEX_TITLE = split_title[0]
 # J. Rawls - Blue #2 (2001)
 TITLE = split_title[1].lstrip()
 
-FEATURING = 'Mystikal, I-20 (이)가 피쳐링한 \n'
+FEATURING = ''
 
-CONTENT = "Ludacris의 2001년 작 \n Move Bitch입니다 \n \n 즐감하세요! \n \n 그간 올린 곡들은 블로그와 \n 네이버 카페 '랩잡'의 'Take Knowledge' 카테고리에서도 만나 보실 수 있습니다. \n  \n http://blog.naver.com/starmekey \n https://cafe.naver.com/rapsup"
+CONTENT = "7L & Esoteric의 2001년 작 \n Rep The Hardest입니다 \n \n 즐감하세요! \n \n"
+
+GUIDE = "그간 올린 곡들은 블로그와 \n 네이버 카페 '랩잡'의 'Take Knowledge' 카테고리에서도 만나 보실 수 있습니다. \n  \n http://blog.naver.com/starmekey \n https://cafe.naver.com/rapsup"
 
 if FEATURING:
     CONTENT = FEATURING + CONTENT
 
-split_content = CONTENT.split('\n')
+split_content = (CONTENT + GUIDE).split('\n')
 HTML_CONTENT = ['<br />' if line == '' else "<p>"+line+"</p>" for line in split_content]
+# audio | video
+LINK_TYPE = 'audio'
 
-LINK_TYPE = 'video'
-
-YOUTUBE_LINK = 'https://youtu.be/s5tAAEuyr0k'
+YOUTUBE_LINK = 'https://youtu.be/NOvs8ABwz3E'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split('/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
 def naver_process():
@@ -200,7 +202,7 @@ def dct_process():
     driver.switch_to.frame(iframe)
 
     editor = driver.find_element(by=By.XPATH, value='/html/body')
-    editor.send_keys(CONTENT)
+    editor.send_keys(CONTENT + GUIDE)
 
     driver.switch_to.default_content()
 
@@ -279,7 +281,7 @@ def hiphople_process():
 
     editor = driver.find_element(by=By.XPATH, value='/html/body/p')
     editor.send_keys('\n\n')
-    editor.send_keys(CONTENT)
+    editor.send_keys(CONTENT + GUIDE)
 
     driver.switch_to.default_content()
 
@@ -352,7 +354,7 @@ def o_u_process():
     time.sleep(2)    
 
 # naver_process()
-# dct_process()
-# hiphople_process()
+dct_process()
 o_u_process()
+hiphople_process()
 driver.quit()
