@@ -3,7 +3,7 @@ import time
 import pyperclip
 
 from selenium import webdriver
-from dotenv import load_dotenv,find_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -15,10 +15,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 # chrome driver setup
 
-options = webdriver.ChromeOptions() 
+options = webdriver.ChromeOptions()
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+driver = webdriver.Chrome(service=Service(
+    ChromeDriverManager().install()), options=options)
 load_dotenv(find_dotenv())
 
 # find text file
@@ -28,7 +29,7 @@ load_dotenv(find_dotenv())
 # list = text.read().split('\\')
 
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
-FULL_TITLE = "Take Knowledge's Choice #1916. 7L & Esoteric - Rep The Hardest(2001)"
+FULL_TITLE = "Take Knowledge's Choice #1917. Master P - A Woman(2001)"
 split_title = FULL_TITLE.split('.', maxsplit=1)
 # Take Knowledge's Choice #1832
 INDEX_TITLE = split_title[0]
@@ -37,7 +38,7 @@ TITLE = split_title[1].lstrip()
 
 FEATURING = ''
 
-CONTENT = "7L & Esoteric의 2001년 작 \n Rep The Hardest입니다 \n \n 즐감하세요! \n \n"
+CONTENT = "Master P의 2001년 작 \n A Woman입니다 \n \n 즐감하세요! \n \n"
 
 GUIDE = "그간 올린 곡들은 블로그와 \n 네이버 카페 '랩잡'의 'Take Knowledge' 카테고리에서도 만나 보실 수 있습니다. \n  \n http://blog.naver.com/starmekey \n https://cafe.naver.com/rapsup"
 
@@ -45,12 +46,15 @@ if FEATURING:
     CONTENT = FEATURING + CONTENT
 
 split_content = (CONTENT + GUIDE).split('\n')
-HTML_CONTENT = ['<br />' if line == '' else "<p>"+line+"</p>" for line in split_content]
+HTML_CONTENT = ['<br />' if line == '' else "<p>" +
+                line+"</p>" for line in split_content]
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/NOvs8ABwz3E'
-IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split('/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+YOUTUBE_LINK = 'https://youtu.be/zK2c0rOuXu0​'
+IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
+    '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+
 
 def naver_process():
     driver.get("http://naver.com/")
@@ -98,7 +102,8 @@ def naver_process():
 
     try:
         element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.XPATH, '//*[@id="NM_FAVORITE"]/div[1]/ul[1]/li[3]/a'))
+            EC.presence_of_element_located(
+                (By.XPATH, '//*[@id="NM_FAVORITE"]/div[1]/ul[1]/li[3]/a'))
         )
     except:
         driver.quit()
@@ -107,16 +112,19 @@ def naver_process():
 
     try:
         element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'se-help-panel-close-button'))
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'se-help-panel-close-button'))
         )
     except:
         driver.quit()
 
-    popup_close_button = driver.find_element_by_class_name('se-help-panel-close-button')
-    popup_close_button = driver.find_element(by=By.CLASS_NAME, value='se-help-panel-close-button')
+    popup_close_button = driver.find_element_by_class_name(
+        'se-help-panel-close-button')
+    popup_close_button = driver.find_element(
+        by=By.CLASS_NAME, value='se-help-panel-close-button')
     popup_close_button.click()
     print(popup_close_button)
-    
+
     try:
         element = WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.CLASS_NAME, 'se-content-guide'))
@@ -124,7 +132,8 @@ def naver_process():
     except:
         driver.quit()
 
-    title_field = driver.find_element(by=By.CSS_SELECTOR, value='.se-documentTitle > span.se-ff-nanumgothic')
+    title_field = driver.find_element(
+        by=By.CSS_SELECTOR, value='.se-documentTitle > span.se-ff-nanumgothic')
     title_field.send_keys(TITLE)
 
     # 까페
@@ -174,7 +183,8 @@ def dct_process():
     pw_field = driver.find_element(by=By.ID, value="passwd")
     pw_field.send_keys(DCT_PW)
 
-    login_button = driver.find_element(by=By.XPATH, value='//*[@id="login"]/form/div[3]/input')
+    login_button = driver.find_element(
+        by=By.XPATH, value='//*[@id="login"]/form/div[3]/input')
     login_button.click()
 
     try:
@@ -189,16 +199,19 @@ def dct_process():
     elif LINK_TYPE == 'video':
         driver.get("https://dctribe.com/0/zboard.php?id=video")
 
-    write_button = driver.find_element(by=By.XPATH, value='//*[@id="bottom"]/div[2]/a')
+    write_button = driver.find_element(
+        by=By.XPATH, value='//*[@id="bottom"]/div[2]/a')
     write_button.click()
 
-    category_select = Select(driver.find_element(by=By.XPATH, value='//*[@id="post"]/form/div[1]/select'))
+    category_select = Select(driver.find_element(
+        by=By.XPATH, value='//*[@id="post"]/form/div[1]/select'))
     category_select.select_by_visible_text("foreign")
 
     title_field = driver.find_element(by=By.CLASS_NAME, value='post_input')
     title_field.send_keys(FULL_TITLE)
 
-    iframe = driver.find_element(by=By.XPATH, value='//*[@id="cke_1_contents"]/iframe')
+    iframe = driver.find_element(
+        by=By.XPATH, value='//*[@id="cke_1_contents"]/iframe')
     driver.switch_to.frame(iframe)
 
     editor = driver.find_element(by=By.XPATH, value='/html/body')
@@ -206,16 +219,18 @@ def dct_process():
 
     driver.switch_to.default_content()
 
-    link_field = driver.find_element(by=By.XPATH, value='//*[@id="post"]/form/div[8]/input')
+    link_field = driver.find_element(
+        by=By.XPATH, value='//*[@id="post"]/form/div[8]/input')
     link_field.send_keys(YOUTUBE_LINK)
 
     time.sleep(2)
-    
+
     upload_button = driver.find_element(by=By.XPATH, value='//*[@id="delete"]')
     upload_button.click()
 
     time.sleep(2)
-    
+
+
 def hiphople_process():
     driver.get("https://hiphople.com/")
 
@@ -242,41 +257,35 @@ def hiphople_process():
     except:
         driver.quit()
 
-    driver.get("https://hiphople.com/fboard")
-
-    try:
-        element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.XPATH, "//*[@id=\"aplosboard\"]/div[4]/div[2]/a[2]"))
-        )
-    except:
-        driver.quit()
-
-    write_btn = driver.find_element(by=By.XPATH, value="//*[@id=\"aplosboard\"]/div[4]/div[2]/a[2]")
-    write_btn.click()
+    driver.get('https://hiphople.com/index.php?mid=fboard&act=dispBoardWrite')
 
     category_select = Select(driver.find_element(by=By.ID, value="category"))
     category_select.select_by_visible_text("음악")
 
     try:
         element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.XPATH, "//*[@id=\"gap\"]/div/div/form/div[2]/div[2]/input"))
+            EC.presence_of_element_located(
+                (By.XPATH, "//*[@id=\"gap\"]/div/div/form/div[2]/div[2]/input"))
         )
     except:
         driver.quit()
 
-    title_field = driver.find_element(by=By.XPATH, value="//*[@id=\"gap\"]/div/div/form/div[2]/div[2]/input")
+    title_field = driver.find_element(
+        by=By.XPATH, value="//*[@id=\"gap\"]/div/div/form/div[2]/div[2]/input")
     title_field.send_keys(FULL_TITLE)
 
     html_code_button = driver.find_element(by=By.ID, value='cke_40')
     html_code_button.click()
 
-    html_editor = driver.find_element(by=By.XPATH, value='//*[@id="cke_1_contents"]/textarea')
+    html_editor = driver.find_element(
+        by=By.XPATH, value='//*[@id="cke_1_contents"]/textarea')
     html_editor.send_keys(IFRAME_LINK)
 
     disable_code = driver.find_element(by=By.XPATH, value='//*[@id="cke_40"]')
     disable_code.click()
 
-    iframe = driver.find_element(by=By.XPATH, value='//*[@id="cke_1_contents"]/iframe')
+    iframe = driver.find_element(
+        by=By.XPATH, value='//*[@id="cke_1_contents"]/iframe')
     driver.switch_to.frame(iframe)
 
     editor = driver.find_element(by=By.XPATH, value='/html/body/p')
@@ -289,6 +298,7 @@ def hiphople_process():
     reg_btn.click()
 
     time.sleep(2)
+
 
 def o_u_process():
     driver.get(url="http://www.todayhumor.co.kr/")
@@ -314,7 +324,8 @@ def o_u_process():
 
     try:
         element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.XPATH, '//*[@id="login_user_menu"]/span'))
+            EC.presence_of_element_located(
+                (By.XPATH, '//*[@id="login_user_menu"]/span'))
         )
     except:
         driver.quit()
@@ -326,35 +337,42 @@ def o_u_process():
 
     try:
         element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'cheditor-tab-code-off'))
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'cheditor-tab-code-off'))
         )
     except:
         driver.quit()
 
-    frame_change_to_html_button = driver.find_element(by=By.CLASS_NAME, value='cheditor-tab-code-off')
+    frame_change_to_html_button = driver.find_element(
+        by=By.CLASS_NAME, value='cheditor-tab-code-off')
     frame_change_to_html_button.click()
 
     try:
         element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'cheditor-editarea-text-content'))
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'cheditor-editarea-text-content'))
         )
     except:
         driver.quit()
 
-    html_area = driver.find_element(by=By.CLASS_NAME, value='cheditor-editarea-text-content')
+    html_area = driver.find_element(
+        by=By.CLASS_NAME, value='cheditor-editarea-text-content')
     html_area.send_keys(IFRAME_LINK)
     html_area.send_keys(HTML_CONTENT)
 
-    frame_change_to_editor_button = driver.find_element(by=By.CLASS_NAME, value='cheditor-tab-rich-off')
+    frame_change_to_editor_button = driver.find_element(
+        by=By.CLASS_NAME, value='cheditor-tab-rich-off')
     frame_change_to_editor_button.click()
 
-    submit_button = driver.find_element(by=By.XPATH, value='//*[@id="write_form"]/table/tbody/tr[2]/td/table/tbody/tr[8]/td/div/input')
+    submit_button = driver.find_element(
+        by=By.XPATH, value='//*[@id="write_form"]/table/tbody/tr[2]/td/table/tbody/tr[8]/td/div/input')
     submit_button.click()
 
-    time.sleep(2)    
+    time.sleep(2)
+
 
 # naver_process()
-dct_process()
-o_u_process()
+# dct_process()
+# o_u_process()
 hiphople_process()
 driver.quit()
