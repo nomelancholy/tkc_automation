@@ -17,33 +17,28 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 options = webdriver.ChromeOptions()
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
+options.add_argument('headless')
 
 driver = webdriver.Chrome(service=Service(
     ChromeDriverManager().install()), options=options)
 load_dotenv(find_dotenv())
 
-# find text file
-# text = open("G:\\T.K.C\\take knowledge's choice.txt", 'rt', encoding='UTF8')
-
-# read text file and split based on \
-# list = text.read().split('\\')
-
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
-FULL_TITLE = "Take Knowledge's Choice #1917. Master P - A Woman(2001)"
+FULL_TITLE = "Take Knowledge's Choice #1919. T.I. - What's Yo Name(2001)"
 split_title = FULL_TITLE.split('.', maxsplit=1)
 # Take Knowledge's Choice #1832
 INDEX_TITLE = split_title[0]
 # J. Rawls - Blue #2 (2001)
 TITLE = split_title[1].lstrip()
 
-FEATURING = ''
+FEATURING = 'The Neptunes가 피쳐링한'
 
-CONTENT = "Master P의 2001년 작 \n A Woman입니다 \n \n 즐감하세요! \n \n"
+CONTENT = "T.I.의 2001년 작 \n What's Yo Name입니다 \n \n 즐감하세요! \n \n"
 
 GUIDE = "그간 올린 곡들은 블로그와 \n 네이버 카페 '랩잡'의 'Take Knowledge' 카테고리에서도 만나 보실 수 있습니다. \n  \n http://blog.naver.com/starmekey \n https://cafe.naver.com/rapsup"
 
 if FEATURING:
-    CONTENT = FEATURING + CONTENT
+    CONTENT = FEATURING + '\n' + CONTENT
 
 split_content = (CONTENT + GUIDE).split('\n')
 HTML_CONTENT = ['<br />' if line == '' else "<p>" +
@@ -51,7 +46,7 @@ HTML_CONTENT = ['<br />' if line == '' else "<p>" +
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/zK2c0rOuXu0​'
+YOUTUBE_LINK = 'https://youtu.be/9xdSxBa62p0​'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
@@ -230,9 +225,11 @@ def dct_process():
 
     time.sleep(2)
 
+    print('dct 업로드 완료')
+
 
 def hiphople_process():
-    driver.get("https://hiphople.com/")
+    driver.get(url="https://hiphople.com/")
 
     HIPHOPLE_ID = os.environ.get("HIPHOPLE_ID")
     HIPHOPLE_PW = os.environ.get("HIPHOPLE_PW")
@@ -257,7 +254,7 @@ def hiphople_process():
     except:
         driver.quit()
 
-    driver.get('https://hiphople.com/index.php?mid=fboard&act=dispBoardWrite')
+    driver.get(url='https://hiphople.com/index.php?mid=fboard&act=dispBoardWrite')
 
     category_select = Select(driver.find_element(by=By.ID, value="category"))
     category_select.select_by_visible_text("음악")
@@ -298,6 +295,8 @@ def hiphople_process():
     reg_btn.click()
 
     time.sleep(2)
+
+    print('hiphop le 업로드 완료')
 
 
 def o_u_process():
@@ -370,9 +369,11 @@ def o_u_process():
 
     time.sleep(2)
 
+    print('오유 업로드 완료')
+
 
 # naver_process()
-# dct_process()
-# o_u_process()
+dct_process()
+o_u_process()
 hiphople_process()
 driver.quit()
