@@ -23,17 +23,20 @@ driver = webdriver.Chrome(service=Service(
     ChromeDriverManager().install()), options=options)
 load_dotenv(find_dotenv())
 
+ARTIST = 'J. Rawls'
+SONG_TITLE = 'Superhero'
+YEAR = '2001'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
-FULL_TITLE = "Take Knowledge's Choice #1919. T.I. - What's Yo Name(2001)"
+FULL_TITLE = f"Take Knowledge's Choice #1924. {ARTIST} - {SONG_TITLE} ({YEAR})"
 split_title = FULL_TITLE.split('.', maxsplit=1)
 # Take Knowledge's Choice #1832
 INDEX_TITLE = split_title[0]
 # J. Rawls - Blue #2 (2001)
 TITLE = split_title[1].lstrip()
 
-FEATURING = 'The Neptunes가 피쳐링한'
+FEATURING = 'Mass Influence가 피쳐링한'
 
-CONTENT = "T.I.의 2001년 작 \n What's Yo Name입니다 \n \n 즐감하세요! \n \n"
+CONTENT = f"{ARTIST}의 {YEAR}년 작 \n {SONG_TITLE}입니다 \n \n 즐감하세요! \n \n"
 
 GUIDE = "그간 올린 곡들은 블로그와 \n 네이버 카페 '랩잡'의 'Take Knowledge' 카테고리에서도 만나 보실 수 있습니다. \n  \n http://blog.naver.com/starmekey \n https://cafe.naver.com/rapsup"
 
@@ -46,7 +49,7 @@ HTML_CONTENT = ['<br />' if line == '' else "<p>" +
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/9xdSxBa62p0​'
+YOUTUBE_LINK = 'https://youtu.be/_sMRs87EMAo'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
