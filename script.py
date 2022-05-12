@@ -23,18 +23,18 @@ driver = webdriver.Chrome(service=Service(
     ChromeDriverManager().install()), options=options)
 load_dotenv(find_dotenv())
 
-ARTIST = 'J. Rawls'
-SONG_TITLE = 'Superhero'
+ARTIST = 'Dungeon Family'
+SONG_TITLE = "Rollin'"
 YEAR = '2001'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
-FULL_TITLE = f"Take Knowledge's Choice #1924. {ARTIST} - {SONG_TITLE} ({YEAR})"
+FULL_TITLE = f"Take Knowledge's Choice #1927. {ARTIST} - {SONG_TITLE} ({YEAR})"
 split_title = FULL_TITLE.split('.', maxsplit=1)
 # Take Knowledge's Choice #1832
 INDEX_TITLE = split_title[0]
 # J. Rawls - Blue #2 (2001)
 TITLE = split_title[1].lstrip()
 
-FEATURING = 'Mass Influence가 피쳐링한'
+FEATURING = ''
 
 CONTENT = f"{ARTIST}의 {YEAR}년 작 \n {SONG_TITLE}입니다 \n \n 즐감하세요! \n \n"
 
@@ -49,7 +49,7 @@ HTML_CONTENT = ['<br />' if line == '' else "<p>" +
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/_sMRs87EMAo'
+YOUTUBE_LINK = 'https://youtu.be/m1_Amc4Ysv0'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
@@ -106,67 +106,68 @@ def naver_process():
     except:
         driver.quit()
 
-    driver.get('https://blog.naver.com/starmekey?Redirect=Write&categoryNo=24')
+    # 블로그
+    # driver.get('https://blog.naver.com/starmekey?Redirect=Write&categoryNo=24')
 
-    try:
-        element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'se-help-panel-close-button'))
-        )
-    except:
-        driver.quit()
+    # try:
+    #     element = WebDriverWait(driver, 5).until(
+    #         EC.presence_of_element_located(
+    #             (By.CLASS_NAME, 'se-help-panel-close-button'))
+    #     )
+    # except:
+    #     driver.quit()
 
-    popup_close_button = driver.find_element_by_class_name(
-        'se-help-panel-close-button')
-    popup_close_button = driver.find_element(
-        by=By.CLASS_NAME, value='se-help-panel-close-button')
-    popup_close_button.click()
-    print(popup_close_button)
+    # popup_close_button = driver.find_element_by_class_name(
+    #     'se-help-panel-close-button')
+    # popup_close_button = driver.find_element(
+    #     by=By.CLASS_NAME, value='se-help-panel-close-button')
+    # popup_close_button.click()
+    # print(popup_close_button)
 
-    try:
-        element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'se-content-guide'))
-        )
-    except:
-        driver.quit()
+    # try:
+    #     element = WebDriverWait(driver, 5).until(
+    #         EC.presence_of_element_located((By.CLASS_NAME, 'se-content-guide'))
+    #     )
+    # except:
+    #     driver.quit()
 
-    title_field = driver.find_element(
-        by=By.CSS_SELECTOR, value='.se-documentTitle > span.se-ff-nanumgothic')
-    title_field.send_keys(TITLE)
+    # title_field = driver.find_element(
+    #     by=By.CSS_SELECTOR, value='.se-documentTitle > span.se-ff-nanumgothic')
+    # title_field.send_keys(TITLE)
 
     # 까페
 
     # driver.get('https://cafe.naver.com/rapsup')
-    #
+    
     # tk_link = driver.find_element_by_link_text('Take Knowledge')
-    #
+    
     # tk_link.click()
 
-    # driver.get('https://cafe.naver.com/ca-fe/cafes/14371899/menus/571/articles/write?boardType=L')
+    driver.get('https://cafe.naver.com/ca-fe/cafes/14371899/menus/571/articles/write?boardType=L')
+    try:
+        element = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CLASS_NAME, 'textarea_input'))
+        )
+    except:
+        driver.quit()
 
-    # try:
-    #     element = WebDriverWait(driver, 5).until(
-    #         EC.presence_of_element_located((By.CLASS_NAME, 'textarea_input'))
-    #     )
-    # except:
-    #     driver.quit()
+    cafe_title_field = driver.find_element(by=By.CLASS_NAME, value='textarea_input')
+    cafe_title_field.click()
+    cafe_title_field.send_keys(FULL_TITLE)
 
-    # cafe_title_field = driver.find_element_by_class_name('textarea_input')
-    # cafe_title_field.click()
-    # cafe_title_field.send_keys(FULL_TITLE)
+    try:
+        element = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'span.se-ff-system'))
+        )
+    except:
+        driver.quit()
 
-    # try:
-    #     element = WebDriverWait(driver, 5).until(
-    #         EC.presence_of_element_located((By.CLASS_NAME, 'se-text-paragraph'))
-    #     )
-    # except:
-    #     driver.quit()
-
-    # cafe_content_field = driver.find_element_by_class_name("se-text-paragraph")
-    # # cafe_content_field = driver.find_element_by_xpath("//div[@class='se-content']//following::span[@class='se-placeholder']")
+    cafe_content_field = driver.find_element(by=By.CSS_SELECTOR, value='span.se-ff-system:nth-child(1)')
+    print(cafe_content_field)
+    # cafe_content_field = driver.find_element_by_xpath("//div[@class='se-content']//following::span[@class='se-placeholder']")
 
     # cafe_content_field.click()
-    # cafe_content_field.send_keys('test')
+    cafe_content_field.send_keys('test')
 
 
 def dct_process():
