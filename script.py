@@ -11,13 +11,14 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
 
 # chrome driver setup
 
 options = webdriver.ChromeOptions()
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
-options.add_argument('headless')
+# options.add_argument('headless')
 
 driver = webdriver.Chrome(service=Service(
     ChromeDriverManager().install()), options=options)
@@ -138,12 +139,13 @@ def naver_process():
     # 까페
 
     # driver.get('https://cafe.naver.com/rapsup')
-    
+
     # tk_link = driver.find_element_by_link_text('Take Knowledge')
-    
+
     # tk_link.click()
 
-    driver.get('https://cafe.naver.com/ca-fe/cafes/14371899/menus/571/articles/write?boardType=L')
+    driver.get(
+        'https://cafe.naver.com/ca-fe/cafes/14371899/menus/571/articles/write?boardType=L')
     try:
         element = WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.CLASS_NAME, 'textarea_input'))
@@ -151,18 +153,21 @@ def naver_process():
     except:
         driver.quit()
 
-    cafe_title_field = driver.find_element(by=By.CLASS_NAME, value='textarea_input')
+    cafe_title_field = driver.find_element(
+        by=By.CLASS_NAME, value='textarea_input')
     cafe_title_field.click()
     cafe_title_field.send_keys(FULL_TITLE)
 
     try:
         element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 'span.se-ff-system'))
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, 'span.se-ff-system'))
         )
     except:
         driver.quit()
 
-    cafe_content_field = driver.find_element(by=By.CSS_SELECTOR, value='span.se-ff-system:nth-child(1)')
+    cafe_content_field = driver.find_element(
+        by=By.CSS_SELECTOR, value='span.se-ff-system:nth-child(1)')
     print(cafe_content_field)
     # cafe_content_field = driver.find_element_by_xpath("//div[@class='se-content']//following::span[@class='se-placeholder']")
 
@@ -257,6 +262,13 @@ def hiphople_process():
         )
     except:
         driver.quit()
+
+    try:
+        noti_container = driver.find_element(by=By.ID, value='nc_container')
+        close_btn = driver.find_element(by=By.CLASS_NAME, value='close')
+        close_btn.click()
+    except NoSuchElementException:
+        print('달린 댓글 없음')
 
     driver.get(url='https://hiphople.com/index.php?mid=fboard&act=dispBoardWrite')
 
@@ -377,7 +389,7 @@ def o_u_process():
 
 
 # naver_process()
-dct_process()
-o_u_process()
+# dct_process()
+# o_u_process()
 hiphople_process()
 driver.quit()
