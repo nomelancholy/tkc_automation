@@ -18,17 +18,17 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 options = webdriver.ChromeOptions()
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
-# options.add_argument('headless')
+options.add_argument('headless')
 
 driver = webdriver.Chrome(service=Service(
     ChromeDriverManager().install()), options=options)
 load_dotenv(find_dotenv())
 
-ARTIST = 'Dungeon Family'
-SONG_TITLE = "Rollin'"
+ARTIST = 'J-Live'
+SONG_TITLE = "Kick it to the Beat"
 YEAR = '2001'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
-FULL_TITLE = f"Take Knowledge's Choice #1927. {ARTIST} - {SONG_TITLE} ({YEAR})"
+FULL_TITLE = f"Take Knowledge's Choice #1928. {ARTIST} - {SONG_TITLE} ({YEAR})"
 split_title = FULL_TITLE.split('.', maxsplit=1)
 # Take Knowledge's Choice #1832
 INDEX_TITLE = split_title[0]
@@ -50,7 +50,7 @@ HTML_CONTENT = ['<br />' if line == '' else "<p>" +
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/m1_Amc4Ysv0'
+YOUTUBE_LINK = 'https://youtu.be/SrDTzB48fMA'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
@@ -265,6 +265,7 @@ def hiphople_process():
 
     try:
         noti_container = driver.find_element(by=By.ID, value='nc_container')
+        print('hiphop le 댓글 달림. 확인 필요')
         close_btn = driver.find_element(by=By.CLASS_NAME, value='close')
         close_btn.click()
     except NoSuchElementException:
@@ -389,7 +390,7 @@ def o_u_process():
 
 
 # naver_process()
-# dct_process()
-# o_u_process()
+dct_process()
+o_u_process()
 hiphople_process()
 driver.quit()
