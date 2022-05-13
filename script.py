@@ -110,44 +110,25 @@ def naver_process():
     # 블로그
     driver.get('https://blog.naver.com/starmekey?Redirect=Write&categoryNo=24')
 
-    # driver.find_element(
-    #     by=By.XPATH, value='//span[contains(text(),"제목")]').click()
 
     time.sleep(3)
-
-    blog_guide = driver.find_element(
-        by=By.CLASS_NAME, value='se-help-container')
-    driver.switch_to.frame(blog_guide)
+    driver.switch_to.frame('mainFrame')
 
     popup_close_button = driver.find_element(
-        by=By.CLASS_NAME, value='se-blind')
+        by=By.CSS_SELECTOR, value='.se-help-panel-close-button')
     popup_close_button.click()
+    time.sleep(2)
 
-    driver.switch_to.default_content()
+   
+    title_field = driver.find_element(
+        by=By.CSS_SELECTOR, value='.se-placeholder.__se_placeholder.se-ff-nanumgothic.se-fs32')
 
-    # try:
-    #     element = WebDriverWait(driver, 5).until(
-    #         EC.presence_of_element_located(
-    #             (By.CLASS_NAME, 'se-help-container'))
-    #     )
-    # except:
-    #     driver.quit()
 
-    # popup_close_button = driver.find_element(
-    #     by=By.CLASS_NAME, value='se-blind')
-    # popup_close_button.click()
-    # print(popup_close_button)
 
-    # try:
-    #     element = WebDriverWait(driver, 5).until(
-    #         EC.presence_of_element_located((By.CLASS_NAME, 'se-content-guide'))
-    #     )
-    # except:
-    #     driver.quit()
+    # title_field = driver.find_element(by=By.XPATH, value='//span[contains(text(),"제목")]')
 
-    # title_field = driver.find_element(
-    #     by=By.CSS_SELECTOR, value='.se-documentTitle > span.se-ff-nanumgothic')
-    # title_field.send_keys(TITLE)
+    title_field.click()
+    title_field.send_keys(TITLE)
 
     # 까페
     # driver.get(
