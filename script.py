@@ -18,7 +18,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 options = webdriver.ChromeOptions()
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
-options.add_argument('headless')
+# options.add_argument('headless')
 
 driver = webdriver.Chrome(service=Service(
     ChromeDriverManager().install()), options=options)
@@ -108,20 +108,33 @@ def naver_process():
         driver.quit()
 
     # 블로그
-    # driver.get('https://blog.naver.com/starmekey?Redirect=Write&categoryNo=24')
+    driver.get('https://blog.naver.com/starmekey?Redirect=Write&categoryNo=24')
+
+    # driver.find_element(
+    #     by=By.XPATH, value='//span[contains(text(),"제목")]').click()
+
+    time.sleep(3)
+
+    blog_guide = driver.find_element(
+        by=By.CLASS_NAME, value='se-help-container')
+    driver.switch_to.frame(blog_guide)
+
+    popup_close_button = driver.find_element(
+        by=By.CLASS_NAME, value='se-blind')
+    popup_close_button.click()
+
+    driver.switch_to.default_content()
 
     # try:
     #     element = WebDriverWait(driver, 5).until(
     #         EC.presence_of_element_located(
-    #             (By.CLASS_NAME, 'se-help-panel-close-button'))
+    #             (By.CLASS_NAME, 'se-help-container'))
     #     )
     # except:
     #     driver.quit()
 
-    # popup_close_button = driver.find_element_by_class_name(
-    #     'se-help-panel-close-button')
     # popup_close_button = driver.find_element(
-    #     by=By.CLASS_NAME, value='se-help-panel-close-button')
+    #     by=By.CLASS_NAME, value='se-blind')
     # popup_close_button.click()
     # print(popup_close_button)
 
@@ -137,42 +150,39 @@ def naver_process():
     # title_field.send_keys(TITLE)
 
     # 까페
+    # driver.get(
+    #     'https://cafe.naver.com/ca-fe/cafes/14371899/menus/571/articles/write?boardType=L')
+    # try:
+    #     element = WebDriverWait(driver, 5).until(
+    #         EC.presence_of_element_located((By.CLASS_NAME, 'textarea_input'))
+    #     )
+    # except:
+    #     driver.quit()
 
-    # driver.get('https://cafe.naver.com/rapsup')
+    # cafe_title_field = driver.find_element(
+    #     by=By.CLASS_NAME, value='textarea_input')
+    # cafe_title_field.click()
+    # cafe_title_field.send_keys(FULL_TITLE)
 
-    # tk_link = driver.find_element_by_link_text('Take Knowledge')
+    # pyperclip.copy(YOUTUBE_LINK)
+    # cafe_title_field.send_keys(Keys.TAB, Keys.CONTROL, 'v')
 
-    # tk_link.click()
+    # try:
+    #     element = WebDriverWait(driver, 7).until(
+    #         EC.presence_of_element_located(
+    #             (By.CLASS_NAME, 'se-section-oembed-video'))
+    #     )
+    # except:
+    #     driver.quit()
 
-    driver.get(
-        'https://cafe.naver.com/ca-fe/cafes/14371899/menus/571/articles/write?boardType=L')
-    try:
-        element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'textarea_input'))
-        )
-    except:
-        driver.quit()
+    # pyperclip.copy(CONTENT)
 
-    cafe_title_field = driver.find_element(
-        by=By.CLASS_NAME, value='textarea_input')
-    cafe_title_field.click()
-    cafe_title_field.send_keys(FULL_TITLE)
+    # cafe_title_field.send_keys(Keys.TAB, Keys.CONTROL, 'v'),
 
-    try:
-        element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located(
-                (By.CSS_SELECTOR, 'span.se-ff-system'))
-        )
-    except:
-        driver.quit()
+    # cafe_register_button = driver.find_element(
+    #     by=By.CLASS_NAME, value='BaseButton__txt')
 
-    cafe_content_field = driver.find_element(
-        by=By.CSS_SELECTOR, value='span.se-ff-system:nth-child(1)')
-    print(cafe_content_field)
-    # cafe_content_field = driver.find_element_by_xpath("//div[@class='se-content']//following::span[@class='se-placeholder']")
-
-    # cafe_content_field.click()
-    cafe_content_field.send_keys('test')
+    # cafe_register_button.click()
 
 
 def dct_process():
@@ -389,8 +399,8 @@ def o_u_process():
     print('오유 업로드 완료')
 
 
-# naver_process()
-dct_process()
-o_u_process()
-hiphople_process()
-driver.quit()
+naver_process()
+# dct_process()
+# o_u_process()
+# hiphople_process()
+# driver.quit()
