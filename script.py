@@ -1,5 +1,6 @@
 import os
 import time
+from turtle import title
 import pyperclip
 
 from selenium import webdriver
@@ -12,6 +13,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.action_chains import ActionChains
 from webdriver_manager.chrome import ChromeDriverManager
 
 # chrome driver setup
@@ -110,29 +112,47 @@ def naver_process():
     # 블로그
     driver.get('https://blog.naver.com/starmekey?Redirect=Write&categoryNo=24')
 
-
     time.sleep(3)
     driver.switch_to.frame('mainFrame')
+
+    time.sleep(2)
 
     popup_close_button = driver.find_element(
         by=By.CSS_SELECTOR, value='.se-help-panel-close-button')
     popup_close_button.click()
     time.sleep(2)
 
-   
-    title_field = driver.find_element(
-        by=By.CSS_SELECTOR, value='.se-placeholder.__se_placeholder.se-ff-nanumgothic.se-fs32')
+    # title_field = driver.find_element(
+    # by=By.CSS_SELECTOR, value='span.se-ff-nanumgothic.se-fs32.__se-node')
 
+    blog_title_field = driver.find_element(
+        by=By.XPATH, value='//span[contains(text(),"제목")]')
 
+    blog_title_field.click()
 
-    # title_field = driver.find_element(by=By.XPATH, value='//span[contains(text(),"제목")]')
+    webdriver.ActionChains(driver=driver).send_keys(TITLE).perform()
 
-    title_field.click()
-    title_field.send_keys(TITLE)
+    blog_content_field = driver.find_element(
+        by=By.XPATH, value='//span[contains(text(),"본문에")]')
 
-    # 까페
+    blog_content_field.click()
+
+    pyperclip.copy(YOUTUBE_LINK)
+    webdriver.ActionChains(driver=driver).key_down(
+        Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
+
+    time.sleep(5)
+
+    webdriver.ActionChains(driver=driver).send_keys(CONTENT).perform()
+
+    posting_register_button = driver.find_element(
+        by=By.XPATH, value='//span[contains(text(),"발행")]')
+    posting_register_button.click()
+
+    # # 까페
     # driver.get(
     #     'https://cafe.naver.com/ca-fe/cafes/14371899/menus/571/articles/write?boardType=L')
+
     # try:
     #     element = WebDriverWait(driver, 5).until(
     #         EC.presence_of_element_located((By.CLASS_NAME, 'textarea_input'))
