@@ -22,15 +22,14 @@ options = webdriver.ChromeOptions()
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 # options.add_argument('headless')
 
-driver = webdriver.Chrome(service=Service(
-    ChromeDriverManager().install()), options=options)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 load_dotenv(find_dotenv())
 
-ARTIST = 'J-Live'
-SONG_TITLE = "Kick it to the Beat"
+ARTIST = 'Declaime'
+SONG_TITLE = "Exclaim The Name"
 YEAR = '2001'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
-FULL_TITLE = f"Take Knowledge's Choice #1928. {ARTIST} - {SONG_TITLE} ({YEAR})"
+FULL_TITLE = f"Take Knowledge's Choice #1929. {ARTIST} - {SONG_TITLE} ({YEAR})"
 split_title = FULL_TITLE.split('.', maxsplit=1)
 # Take Knowledge's Choice #1832
 INDEX_TITLE = split_title[0]
@@ -52,10 +51,131 @@ HTML_CONTENT = ['<br />' if line == '' else "<p>" +
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/SrDTzB48fMA'
+YOUTUBE_LINK = 'https://youtu.be/RnDbYLRGIkI'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
+def blog_process():
+    driver.get('https://blog.naver.com/starmekey?Redirect=Write&categoryNo=24')
+
+
+    time.sleep(3)
+    driver.switch_to.frame('mainFrame')
+
+    time.sleep(2)
+
+    try:
+        element = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CLASS_NAME, 'se-popup-container'))
+        )
+        popup_cancel_button = driver.find_element(by=By.CLASS_NAME, value='se-popup-button-cancel')
+        popup_cancel_button.send_keys(Keys.ENTER)
+
+    except:
+        print('작성중인 글 없음')
+
+    popup_close_button = driver.find_element(
+        by=By.CSS_SELECTOR, value='.se-help-panel-close-button')
+    popup_close_button.click()
+    time.sleep(2)
+
+    # title_field = driver.find_element(
+    # by=By.CSS_SELECTOR, value='span.se-ff-nanumgothic.se-fs32.__se-node')
+
+    blog_title_field = driver.find_element(
+        by=By.XPATH, value='//span[contains(text(),"제목")]')
+
+    blog_title_field.click()
+
+    webdriver.ActionChains(driver=driver).send_keys(TITLE).perform()
+
+    blog_content_field = driver.find_element(
+        by=By.XPATH, value='//span[contains(text(),"본문에")]')
+
+    blog_content_field.click()
+
+    pyperclip.copy(YOUTUBE_LINK)
+    webdriver.ActionChains(driver=driver).key_down(
+        Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
+
+    time.sleep(5)
+
+    webdriver.ActionChains(driver=driver).send_keys(CONTENT).perform()
+
+    posting_register_button = driver.find_element(
+        by=By.XPATH, value='//span[contains(text(),"발행")]')
+    posting_register_button.click()
+
+    posting_confirm_button = driver.find_element(by=By.CLASS_NAME, value='confirm_btn__Dv9du')
+    posting_confirm_button.click()
+
+    try:
+        element = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.ID, 'floatingda_content'))
+        )
+
+        receive_bean_button = driver.find_element(
+        by=By.XPATH, value='//span[contains(text(),"기부콩")]')
+
+        receive_bean_button.click()
+        print('네이버 블로그 완료')
+    except:
+        print('네이버 블로그 완료 (콩 받기는 실패)')
+        driver.quit()
+    
+
+def cafe_process():
+    driver.get(
+        'https://cafe.naver.com/ca-fe/cafes/14371899/menus/571/articles/write?boardType=L')
+
+    try:
+        element = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CLASS_NAME, 'textarea_input'))
+        )
+    except:
+        driver.quit()
+
+    cafe_title_field = driver.find_element(
+        by=By.CLASS_NAME, value='textarea_input')
+    cafe_title_field.click()
+    cafe_title_field.send_keys(FULL_TITLE)
+
+    cafe_content_field = driver.find_element(
+        by=By.XPATH, value='//span[contains(text(),"내용을")]')
+
+    cafe_content_field.click()
+
+    pyperclip.copy(YOUTUBE_LINK)
+    webdriver.ActionChains(driver=driver).key_down(Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
+
+    try:
+        element = WebDriverWait(driver, 7).until(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'se-section-oembed-video'))
+        )
+    except:
+        driver.quit()
+
+    pyperclip.copy(CONTENT)
+    webdriver.ActionChains(driver=driver).key_down(Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
+
+    cafe_register_button = driver.find_element(
+        by=By.CLASS_NAME, value='BaseButton__txt')
+
+    cafe_register_button.click()
+
+    time.sleep(3)
+    try:
+        element = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.ID, 'floatingda_content'))
+        )
+
+        receive_bean_button = driver.find_element(
+        by=By.XPATH, value='//span[contains(text(),"기부콩")]')
+
+        receive_bean_button.click()
+    except:
+        driver.quit()
 
 def naver_process():
     driver.get("http://naver.com/")
@@ -110,81 +230,9 @@ def naver_process():
         driver.quit()
 
     # 블로그
-    driver.get('https://blog.naver.com/starmekey?Redirect=Write&categoryNo=24')
-
-    time.sleep(3)
-    driver.switch_to.frame('mainFrame')
-
-    time.sleep(2)
-
-    popup_close_button = driver.find_element(
-        by=By.CSS_SELECTOR, value='.se-help-panel-close-button')
-    popup_close_button.click()
-    time.sleep(2)
-
-    # title_field = driver.find_element(
-    # by=By.CSS_SELECTOR, value='span.se-ff-nanumgothic.se-fs32.__se-node')
-
-    blog_title_field = driver.find_element(
-        by=By.XPATH, value='//span[contains(text(),"제목")]')
-
-    blog_title_field.click()
-
-    webdriver.ActionChains(driver=driver).send_keys(TITLE).perform()
-
-    blog_content_field = driver.find_element(
-        by=By.XPATH, value='//span[contains(text(),"본문에")]')
-
-    blog_content_field.click()
-
-    pyperclip.copy(YOUTUBE_LINK)
-    webdriver.ActionChains(driver=driver).key_down(
-        Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
-
-    time.sleep(5)
-
-    webdriver.ActionChains(driver=driver).send_keys(CONTENT).perform()
-
-    posting_register_button = driver.find_element(
-        by=By.XPATH, value='//span[contains(text(),"발행")]')
-    posting_register_button.click()
-
-    # # 까페
-    # driver.get(
-    #     'https://cafe.naver.com/ca-fe/cafes/14371899/menus/571/articles/write?boardType=L')
-
-    # try:
-    #     element = WebDriverWait(driver, 5).until(
-    #         EC.presence_of_element_located((By.CLASS_NAME, 'textarea_input'))
-    #     )
-    # except:
-    #     driver.quit()
-
-    # cafe_title_field = driver.find_element(
-    #     by=By.CLASS_NAME, value='textarea_input')
-    # cafe_title_field.click()
-    # cafe_title_field.send_keys(FULL_TITLE)
-
-    # pyperclip.copy(YOUTUBE_LINK)
-    # cafe_title_field.send_keys(Keys.TAB, Keys.CONTROL, 'v')
-
-    # try:
-    #     element = WebDriverWait(driver, 7).until(
-    #         EC.presence_of_element_located(
-    #             (By.CLASS_NAME, 'se-section-oembed-video'))
-    #     )
-    # except:
-    #     driver.quit()
-
-    # pyperclip.copy(CONTENT)
-
-    # cafe_title_field.send_keys(Keys.TAB, Keys.CONTROL, 'v'),
-
-    # cafe_register_button = driver.find_element(
-    #     by=By.CLASS_NAME, value='BaseButton__txt')
-
-    # cafe_register_button.click()
-
+    # blog_process()
+    # 까페
+    cafe_process()
 
 def dct_process():
     driver.get("https://dctribe.com/")
