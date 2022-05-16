@@ -1,6 +1,5 @@
 import os
 import time
-from turtle import title
 import pyperclip
 
 from selenium import webdriver
@@ -25,11 +24,11 @@ options.add_experimental_option('excludeSwitches', ['enable-logging'])
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 load_dotenv(find_dotenv())
 
-ARTIST = 'Declaime'
-SONG_TITLE = "Exclaim The Name"
+ARTIST = 'D12'
+SONG_TITLE = "Blow My Buzz"
 YEAR = '2001'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
-FULL_TITLE = f"Take Knowledge's Choice #1929. {ARTIST} - {SONG_TITLE} ({YEAR})"
+FULL_TITLE = f"Take Knowledge's Choice #1931. {ARTIST} - {SONG_TITLE} ({YEAR})"
 split_title = FULL_TITLE.split('.', maxsplit=1)
 # Take Knowledge's Choice #1832
 INDEX_TITLE = split_title[0]
@@ -51,7 +50,7 @@ HTML_CONTENT = ['<br />' if line == '' else "<p>" +
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/RnDbYLRGIkI'
+YOUTUBE_LINK = 'https://youtu.be/RuDOabXS4nU'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
@@ -121,7 +120,7 @@ def blog_process():
         print('네이버 블로그 완료')
     except:
         print('네이버 블로그 완료 (콩 받기는 실패)')
-        driver.quit()
+        # driver.quit()
     
 
 def cafe_process():
@@ -140,10 +139,12 @@ def cafe_process():
     cafe_title_field.click()
     cafe_title_field.send_keys(FULL_TITLE)
 
-    cafe_content_field = driver.find_element(
-        by=By.XPATH, value='//span[contains(text(),"내용을")]')
+    webdriver.ActionChains(driver=driver).key_down(Keys.TAB).key_up(Keys.TAB).perform()
 
-    cafe_content_field.click()
+    # cafe_content_field = driver.find_element(
+    #     by=By.XPATH, value='//span[contains(text(),"내용을")]')
+
+    # cafe_content_field.click()
 
     pyperclip.copy(YOUTUBE_LINK)
     webdriver.ActionChains(driver=driver).key_down(Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
@@ -174,8 +175,11 @@ def cafe_process():
         by=By.XPATH, value='//span[contains(text(),"기부콩")]')
 
         receive_bean_button.click()
+
+        print('까페 글쓰기 완료')
     except:
-        driver.quit()
+        print('까페 글쓰기 완료 (콩받기는 실패)')
+        # driver.quit()
 
 def naver_process():
     driver.get("http://naver.com/")
@@ -230,7 +234,7 @@ def naver_process():
         driver.quit()
 
     # 블로그
-    # blog_process()
+    blog_process()
     # 까페
     cafe_process()
 
@@ -449,7 +453,7 @@ def o_u_process():
 
 
 naver_process()
-# dct_process()
-# o_u_process()
-# hiphople_process()
-# driver.quit()
+dct_process()
+o_u_process()
+hiphople_process()
+driver.quit()
