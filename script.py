@@ -24,18 +24,18 @@ options.add_experimental_option('excludeSwitches', ['enable-logging'])
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 load_dotenv(find_dotenv())
 
-ARTIST = 'D12'
-SONG_TITLE = "Blow My Buzz"
+ARTIST = 'De La Soul'
+SONG_TITLE = "What We Do (For Love)"
 YEAR = '2001'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
-FULL_TITLE = f"Take Knowledge's Choice #1931. {ARTIST} - {SONG_TITLE} ({YEAR})"
+FULL_TITLE = f"Take Knowledge's Choice #1936. {ARTIST} - {SONG_TITLE} ({YEAR})"
 split_title = FULL_TITLE.split('.', maxsplit=1)
 # Take Knowledge's Choice #1832
 INDEX_TITLE = split_title[0]
 # J. Rawls - Blue #2 (2001)
 TITLE = split_title[1].lstrip()
 
-FEATURING = ''
+FEATURING = 'Slick Rick'
 
 CONTENT = f"{ARTIST}의 {YEAR}년 작 \n {SONG_TITLE}입니다 \n \n 즐감하세요! \n \n"
 
@@ -50,7 +50,7 @@ HTML_CONTENT = ['<br />' if line == '' else "<p>" +
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/RuDOabXS4nU'
+YOUTUBE_LINK = 'https://youtu.be/uAI-MWbRlDg'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
@@ -108,14 +108,21 @@ def blog_process():
     posting_confirm_button = driver.find_element(by=By.CLASS_NAME, value='confirm_btn__Dv9du')
     posting_confirm_button.click()
 
+    time.sleep(5)
+
     try:
         element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.ID, 'floatingda_content'))
+            EC.presence_of_element_located((By.XPATH, '//*[contains(text(),"클릭하고")]'))
         )
 
-        receive_bean_button = driver.find_element(
-        by=By.XPATH, value='//span[contains(text(),"기부콩")]')
+        print('블로그 배너 컨텐츠는 찾음')
 
+        receive_bean_button = driver.find_element(
+        by=By.XPATH, value='//*[contains(text(),"콩받기")]')
+
+        print(receive_bean_button)
+        print(receive_bean_button.size())
+   
         receive_bean_button.click()
         print('네이버 블로그 완료')
     except:
@@ -140,11 +147,6 @@ def cafe_process():
     cafe_title_field.send_keys(FULL_TITLE)
 
     webdriver.ActionChains(driver=driver).key_down(Keys.TAB).key_up(Keys.TAB).perform()
-
-    # cafe_content_field = driver.find_element(
-    #     by=By.XPATH, value='//span[contains(text(),"내용을")]')
-
-    # cafe_content_field.click()
 
     pyperclip.copy(YOUTUBE_LINK)
     webdriver.ActionChains(driver=driver).key_down(Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
@@ -171,8 +173,14 @@ def cafe_process():
             EC.presence_of_element_located((By.ID, 'floatingda_content'))
         )
 
+        print('까페 배너 컨텐츠는 찾음')
+        something = driver.find_element(
+        by=By.ID, value="floatingda_content")
+        print(something)
+        print(something.size())
+
         receive_bean_button = driver.find_element(
-        by=By.XPATH, value='//span[contains(text(),"기부콩")]')
+        by=By.XPATH, value='//*[contains(text(),"해피빈")]')
 
         receive_bean_button.click()
 
@@ -236,7 +244,7 @@ def naver_process():
     # 블로그
     blog_process()
     # 까페
-    cafe_process()
+    # cafe_process()
 
 def dct_process():
     driver.get("https://dctribe.com/")
@@ -332,7 +340,7 @@ def hiphople_process():
         close_btn = driver.find_element(by=By.CLASS_NAME, value='close')
         close_btn.click()
     except NoSuchElementException:
-        print('달린 댓글 없음')
+        print('Hiphop le 달린 댓글 없음')
 
     driver.get(url='https://hiphople.com/index.php?mid=fboard&act=dispBoardWrite')
 
@@ -453,7 +461,7 @@ def o_u_process():
 
 
 naver_process()
-dct_process()
-o_u_process()
-hiphople_process()
-driver.quit()
+# dct_process()
+# o_u_process()
+# hiphople_process()
+# driver.quit()
