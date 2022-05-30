@@ -24,25 +24,26 @@ options.add_experimental_option('excludeSwitches', ['enable-logging'])
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 load_dotenv(find_dotenv())
 
-ARTIST = 'De La Soul'
-SONG_TITLE = "What We Do (For Love)"
+ARTIST = 'Aesop Rock'
+SONG_TITLE = "Flashflood"
 YEAR = '2001'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
-FULL_TITLE = f"Take Knowledge's Choice #1936. {ARTIST} - {SONG_TITLE} ({YEAR})"
+FULL_TITLE = f"Take Knowledge's Choice #1940. {ARTIST} - {SONG_TITLE} ({YEAR})"
 split_title = FULL_TITLE.split('.', maxsplit=1)
 # Take Knowledge's Choice #1832
 INDEX_TITLE = split_title[0]
 # J. Rawls - Blue #2 (2001)
 TITLE = split_title[1].lstrip()
 
-FEATURING = 'Slick Rick'
+FEATURING = ''
+FEATURING_MESSAGE = '이 피쳐링한'
 
 CONTENT = f"{ARTIST}의 {YEAR}년 작 \n {SONG_TITLE}입니다 \n \n 즐감하세요! \n \n"
 
 GUIDE = "그간 올린 곡들은 블로그와 \n 네이버 카페 '랩잡'의 'Take Knowledge' 카테고리에서도 만나 보실 수 있습니다. \n  \n http://blog.naver.com/starmekey \n https://cafe.naver.com/rapsup"
 
 if FEATURING:
-    CONTENT = FEATURING + '\n' + CONTENT
+    CONTENT = FEATURING + FEATURING_MESSAGE + '\n' + CONTENT
 
 split_content = (CONTENT + GUIDE).split('\n')
 HTML_CONTENT = ['<br />' if line == '' else "<p>" +
@@ -50,13 +51,12 @@ HTML_CONTENT = ['<br />' if line == '' else "<p>" +
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/uAI-MWbRlDg'
+YOUTUBE_LINK = 'https://youtu.be/lYeR9s0uT2I'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
 def blog_process():
     driver.get('https://blog.naver.com/starmekey?Redirect=Write&categoryNo=24')
-
 
     time.sleep(3)
     driver.switch_to.frame('mainFrame')
@@ -77,9 +77,6 @@ def blog_process():
         by=By.CSS_SELECTOR, value='.se-help-panel-close-button')
     popup_close_button.click()
     time.sleep(2)
-
-    # title_field = driver.find_element(
-    # by=By.CSS_SELECTOR, value='span.se-ff-nanumgothic.se-fs32.__se-node')
 
     blog_title_field = driver.find_element(
         by=By.XPATH, value='//span[contains(text(),"제목")]')
@@ -109,26 +106,11 @@ def blog_process():
     posting_confirm_button.click()
 
     time.sleep(5)
-
-    try:
-        element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.XPATH, '//*[contains(text(),"클릭하고")]'))
-        )
-
-        print('블로그 배너 컨텐츠는 찾음')
-
-        receive_bean_button = driver.find_element(
-        by=By.XPATH, value='//*[contains(text(),"콩받기")]')
-
-        print(receive_bean_button)
-        print(receive_bean_button.size())
-   
-        receive_bean_button.click()
-        print('네이버 블로그 완료')
-    except:
-        print('네이버 블로그 완료 (콩 받기는 실패)')
-        # driver.quit()
     
+    bean_popup = driver.find_element(by=By.ID, value='floatingda_content')
+
+    webdriver.ActionChains(driver=driver).move_to_element(bean_popup).move_by_offset(5, 5).click().perform()
+
 
 def cafe_process():
     driver.get(
@@ -145,6 +127,8 @@ def cafe_process():
         by=By.CLASS_NAME, value='textarea_input')
     cafe_title_field.click()
     cafe_title_field.send_keys(FULL_TITLE)
+
+    time.sleep(5)
 
     webdriver.ActionChains(driver=driver).key_down(Keys.TAB).key_up(Keys.TAB).perform()
 
@@ -168,26 +152,12 @@ def cafe_process():
     cafe_register_button.click()
 
     time.sleep(3)
-    try:
-        element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.ID, 'floatingda_content'))
-        )
 
-        print('까페 배너 컨텐츠는 찾음')
-        something = driver.find_element(
-        by=By.ID, value="floatingda_content")
-        print(something)
-        print(something.size())
+    bean_popup = driver.find_element(by=By.ID, value='floatingda_content')
 
-        receive_bean_button = driver.find_element(
-        by=By.XPATH, value='//*[contains(text(),"해피빈")]')
+    webdriver.ActionChains(driver=driver).move_to_element(bean_popup).move_by_offset(5, 5).click().perform()
+            
 
-        receive_bean_button.click()
-
-        print('까페 글쓰기 완료')
-    except:
-        print('까페 글쓰기 완료 (콩받기는 실패)')
-        # driver.quit()
 
 def naver_process():
     driver.get("http://naver.com/")
@@ -202,7 +172,6 @@ def naver_process():
     except:
         driver.quit()
 
-    # login_button = driver.find_element_by_css_selector(".link_login")
     login_button = driver.find_element(by=By.CLASS_NAME, value="link_login")
     login_button.click()
 
@@ -213,10 +182,8 @@ def naver_process():
     except:
         driver.quit()
 
-    # id_field = driver.find_element_by_id('id')
     id_field = driver.find_element(by=By.ID, value='id')
 
-    # pw_field = driver.find_element_by_id('pw')
     pw_field = driver.find_element(by=By.ID, value='pw')
 
     id_field.click()
@@ -229,7 +196,6 @@ def naver_process():
     pw_field.send_keys(Keys.CONTROL, 'v')
     time.sleep(2)
 
-    # submit_button = driver.find_element_by_id("log.login")
     submit_button = driver.find_element(by=By.ID, value="log.login")
     submit_button.click()
 
@@ -242,9 +208,9 @@ def naver_process():
         driver.quit()
 
     # 블로그
-    blog_process()
+    # blog_process()
     # 까페
-    # cafe_process()
+    cafe_process()
 
 def dct_process():
     driver.get("https://dctribe.com/")
@@ -313,6 +279,13 @@ def hiphople_process():
 
     HIPHOPLE_ID = os.environ.get("HIPHOPLE_ID")
     HIPHOPLE_PW = os.environ.get("HIPHOPLE_PW")
+
+    try:
+        element = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CLASS_NAME, 'tg_btn'))
+        )
+    except:
+        driver.quit()
 
     popup_load_btn = driver.find_element(by=By.CLASS_NAME, value='tg_btn')
 
@@ -390,6 +363,8 @@ def hiphople_process():
 def o_u_process():
     driver.get(url="http://www.todayhumor.co.kr/")
 
+    time.sleep(3)
+
     try:
         element = WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.XPATH, '//*[@id="id"]'))
@@ -464,4 +439,4 @@ naver_process()
 # dct_process()
 # o_u_process()
 # hiphople_process()
-# driver.quit()
+driver.quit()
