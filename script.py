@@ -20,15 +20,18 @@ from webdriver_manager.chrome import ChromeDriverManager
 options = webdriver.ChromeOptions()
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 # options.add_argument('headless')
+options.add_argument('window-size=1920,1080')
+# To - Do : time.sleep 들 다 특정 엘리먼트가 나오면 실행되게 변경 필요
+
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 load_dotenv(find_dotenv())
 
-ARTIST = 'Aesop Rock'
-SONG_TITLE = "Flashflood"
+ARTIST = 'Ugly Duckling'
+SONG_TITLE = "If Ya Wanna Know"
 YEAR = '2001'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
-FULL_TITLE = f"Take Knowledge's Choice #1940. {ARTIST} - {SONG_TITLE} ({YEAR})"
+FULL_TITLE = f"Take Knowledge's Choice #1945. {ARTIST} - {SONG_TITLE} ({YEAR})"
 split_title = FULL_TITLE.split('.', maxsplit=1)
 # Take Knowledge's Choice #1832
 INDEX_TITLE = split_title[0]
@@ -36,7 +39,7 @@ INDEX_TITLE = split_title[0]
 TITLE = split_title[1].lstrip()
 
 FEATURING = ''
-FEATURING_MESSAGE = '이 피쳐링한'
+FEATURING_MESSAGE = '가 피쳐링한'
 
 CONTENT = f"{ARTIST}의 {YEAR}년 작 \n {SONG_TITLE}입니다 \n \n 즐감하세요! \n \n"
 
@@ -51,27 +54,36 @@ HTML_CONTENT = ['<br />' if line == '' else "<p>" +
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/lYeR9s0uT2I'
+YOUTUBE_LINK = 'https://youtu.be/iMDRhQ3txG8'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
 def blog_process():
     driver.get('https://blog.naver.com/starmekey?Redirect=Write&categoryNo=24')
 
-    time.sleep(3)
+    # time.sleep(5)
+
+    # webdriver(driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'se-help-panel-close-button')))
+
+    # popup_close_button = driver.find_element(
+    #     by=By.CSS_SELECTOR, value='.se-help-panel-close-button')
+
+    # WebDriverWait(driver, 20).until(EC.frame_to_be_available_and_switch_to_it((By.ID, "mainFrame")))
+
+    time.sleep(5)
     driver.switch_to.frame('mainFrame')
 
-    time.sleep(2)
+    # time.sleep(2)
 
-    try:
-        element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'se-popup-container'))
-        )
-        popup_cancel_button = driver.find_element(by=By.CLASS_NAME, value='se-popup-button-cancel')
-        popup_cancel_button.send_keys(Keys.ENTER)
+    # try:
+    #     element = WebDriverWait(driver, 5).until(
+    #         EC.presence_of_element_located((By.CLASS_NAME, 'se-popup-container'))
+    #     )
+    #     popup_cancel_button = driver.find_element(by=By.CLASS_NAME, value='se-popup-button-cancel')
+    #     popup_cancel_button.send_keys(Keys.ENTER)
 
-    except:
-        print('작성중인 글 없음')
+    # except:
+    #     print('작성중인 글 없음')
 
     popup_close_button = driver.find_element(
         by=By.CSS_SELECTOR, value='.se-help-panel-close-button')
@@ -111,6 +123,7 @@ def blog_process():
 
     webdriver.ActionChains(driver=driver).move_to_element(bean_popup).move_by_offset(5, 5).click().perform()
 
+    print('네이버 블로그 업로드 완료')
 
 def cafe_process():
     driver.get(
@@ -157,7 +170,7 @@ def cafe_process():
 
     webdriver.ActionChains(driver=driver).move_to_element(bean_popup).move_by_offset(5, 5).click().perform()
             
-
+    print('네이버 카페 업로드  완료')
 
 def naver_process():
     driver.get("http://naver.com/")
@@ -165,22 +178,26 @@ def naver_process():
     NAVER_ID = os.environ.get("NAVER_ID")
     NAVER_PW = os.environ.get("NAVER_PW")
 
-    try:
-        element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'link_login'))
-        )
-    except:
-        driver.quit()
+    WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CLASS_NAME, "link_login")))
+
+    # try:
+    #     element = WebDriverWait(driver, 5).until(
+    #         EC.presence_of_element_located((By.CLASS_NAME, 'link_login'))
+    #     )
+    # except:
+    #     driver.quit()
 
     login_button = driver.find_element(by=By.CLASS_NAME, value="link_login")
     login_button.click()
 
-    try:
-        element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.ID, 'id'))
-        )
-    except:
-        driver.quit()
+    # try:
+    #     element = WebDriverWait(driver, 5).until(
+    #         EC.presence_of_element_located((By.ID, 'id'))
+    #     )
+    # except:
+    #     driver.quit()
+
+    WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.ID, "id")))
 
     id_field = driver.find_element(by=By.ID, value='id')
 
@@ -199,16 +216,24 @@ def naver_process():
     submit_button = driver.find_element(by=By.ID, value="log.login")
     submit_button.click()
 
-    try:
-        element = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located(
-                (By.XPATH, '//*[@id="NM_FAVORITE"]/div[1]/ul[1]/li[3]/a'))
-        )
-    except:
-        driver.quit()
+    # current_url = driver.current_url
+
+
+    # try:
+    #     element = WebDriverWait(driver, 5).until(
+    #         EC.presence_of_element_located(
+    #             (By.XPATH, '//*[@id="NM_FAVORITE"]/div[1]/ul[1]/li[3]/a'))
+    #     )
+    # except:
+    #     print('실패')
+        # driver.quit()
+
+    # WebDriverWait(driver, 20).until(EC.url_changes(current_url))
+
+    WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CLASS_NAME, "thumb_bd")))
 
     # 블로그
-    # blog_process()
+    blog_process()
     # 까페
     cafe_process()
 
@@ -233,7 +258,8 @@ def dct_process():
             EC.presence_of_element_located((By.ID, 'account'))
         )
     except:
-        driver.quit()
+        # driver.quit()
+        print('실패')
 
     if LINK_TYPE == 'audio':
         driver.get("https://dctribe.com/0/zboard.php?id=audio")
@@ -285,7 +311,8 @@ def hiphople_process():
             EC.presence_of_element_located((By.CLASS_NAME, 'tg_btn'))
         )
     except:
-        driver.quit()
+        # driver.quit()
+        print('실패')
 
     popup_load_btn = driver.find_element(by=By.CLASS_NAME, value='tg_btn')
 
@@ -305,7 +332,8 @@ def hiphople_process():
             EC.presence_of_element_located((By.LINK_TEXT, 'LOGOUT'))
         )
     except:
-        driver.quit()
+        # driver.quit()
+        print('실패')
 
     try:
         noti_container = driver.find_element(by=By.ID, value='nc_container')
@@ -326,7 +354,8 @@ def hiphople_process():
                 (By.XPATH, "//*[@id=\"gap\"]/div/div/form/div[2]/div[2]/input"))
         )
     except:
-        driver.quit()
+        # driver.quit()
+        print('실패')
 
     title_field = driver.find_element(
         by=By.XPATH, value="//*[@id=\"gap\"]/div/div/form/div[2]/div[2]/input")
@@ -370,7 +399,8 @@ def o_u_process():
             EC.presence_of_element_located((By.XPATH, '//*[@id="id"]'))
         )
     except:
-        driver.quit()
+        print('실패')
+        # driver.quit()
 
     O_U_ID = os.environ.get("O_U_ID")
     O_U_PW = os.environ.get("O_U_PW")
@@ -390,7 +420,8 @@ def o_u_process():
                 (By.XPATH, '//*[@id="login_user_menu"]/span'))
         )
     except:
-        driver.quit()
+        print('실패')
+        # driver.quit()
 
     driver.get("http://www.todayhumor.co.kr/board/write.php?table=music")
 
@@ -403,7 +434,8 @@ def o_u_process():
                 (By.CLASS_NAME, 'cheditor-tab-code-off'))
         )
     except:
-        driver.quit()
+        print('실패')
+        # driver.quit()
 
     frame_change_to_html_button = driver.find_element(
         by=By.CLASS_NAME, value='cheditor-tab-code-off')
@@ -415,7 +447,8 @@ def o_u_process():
                 (By.CLASS_NAME, 'cheditor-editarea-text-content'))
         )
     except:
-        driver.quit()
+        print('실패')
+        # driver.quit()
 
     html_area = driver.find_element(
         by=By.CLASS_NAME, value='cheditor-editarea-text-content')
@@ -436,7 +469,7 @@ def o_u_process():
 
 
 naver_process()
-# dct_process()
-# o_u_process()
-# hiphople_process()
+dct_process()
+o_u_process()
+hiphople_process()
 driver.quit()
