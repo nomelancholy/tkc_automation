@@ -18,13 +18,17 @@ from webdriver_manager.chrome import ChromeDriverManager
 # chrome driver setup
 
 options = webdriver.ChromeOptions()
-options.add_experimental_option('excludeSwitches', ['enable-logging'])
-# options.add_argument('headless')
-options.add_argument('window-size=1920,1080')
+# options.add_argument('--headless')
+options.add_argument('--disable-gpu')
+options.add_argument('--no-sandbox')
+options.add_argument("--start-maximized")
+options.add_argument("--window-size=1920x1080")
 # To - Do : time.sleep 들 다 특정 엘리먼트가 나오면 실행되게 변경 필요
 
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+driver = webdriver.Chrome(service=Service(
+    ChromeDriverManager().install()), options=options)
+driver.implicitly_wait(10)
 load_dotenv(find_dotenv())
 
 ARTIST = 'Ugly Duckling'
@@ -58,17 +62,25 @@ YOUTUBE_LINK = 'https://youtu.be/iMDRhQ3txG8'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
+
 def blog_process():
     driver.get('https://blog.naver.com/starmekey?Redirect=Write&categoryNo=24')
 
     # time.sleep(5)
 
+    # iframes = driver.find_element(By.TAG_NAME('ifram'))
+
+    # print(iframes)
+
+    # for iframe in iframes:
+    #     print(iframe)
     # webdriver(driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'se-help-panel-close-button')))
 
     # popup_close_button = driver.find_element(
     #     by=By.CSS_SELECTOR, value='.se-help-panel-close-button')
 
-    # WebDriverWait(driver, 20).until(EC.frame_to_be_available_and_switch_to_it((By.ID, "mainFrame")))
+    # WebDriverWait(driver, 20).until(
+    #     EC.frame_to_be_available_and_switch_to_it((By.XPATH, "//*[@id='mainFrame']")))
 
     time.sleep(5)
     driver.switch_to.frame('mainFrame')
@@ -114,16 +126,19 @@ def blog_process():
         by=By.XPATH, value='//span[contains(text(),"발행")]')
     posting_register_button.click()
 
-    posting_confirm_button = driver.find_element(by=By.CLASS_NAME, value='confirm_btn__Dv9du')
+    posting_confirm_button = driver.find_element(
+        by=By.CLASS_NAME, value='confirm_btn__Dv9du')
     posting_confirm_button.click()
 
     time.sleep(5)
-    
+
     bean_popup = driver.find_element(by=By.ID, value='floatingda_content')
 
-    webdriver.ActionChains(driver=driver).move_to_element(bean_popup).move_by_offset(5, 5).click().perform()
+    webdriver.ActionChains(driver=driver).move_to_element(
+        bean_popup).move_by_offset(5, 5).click().perform()
 
     print('네이버 블로그 업로드 완료')
+
 
 def cafe_process():
     driver.get(
@@ -143,10 +158,12 @@ def cafe_process():
 
     time.sleep(5)
 
-    webdriver.ActionChains(driver=driver).key_down(Keys.TAB).key_up(Keys.TAB).perform()
+    webdriver.ActionChains(driver=driver).key_down(
+        Keys.TAB).key_up(Keys.TAB).perform()
 
     pyperclip.copy(YOUTUBE_LINK)
-    webdriver.ActionChains(driver=driver).key_down(Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
+    webdriver.ActionChains(driver=driver).key_down(
+        Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
 
     try:
         element = WebDriverWait(driver, 7).until(
@@ -157,7 +174,8 @@ def cafe_process():
         driver.quit()
 
     pyperclip.copy(CONTENT)
-    webdriver.ActionChains(driver=driver).key_down(Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
+    webdriver.ActionChains(driver=driver).key_down(
+        Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
 
     cafe_register_button = driver.find_element(
         by=By.CLASS_NAME, value='BaseButton__txt')
@@ -168,9 +186,11 @@ def cafe_process():
 
     bean_popup = driver.find_element(by=By.ID, value='floatingda_content')
 
-    webdriver.ActionChains(driver=driver).move_to_element(bean_popup).move_by_offset(5, 5).click().perform()
-            
+    webdriver.ActionChains(driver=driver).move_to_element(
+        bean_popup).move_by_offset(5, 5).click().perform()
+
     print('네이버 카페 업로드  완료')
+
 
 def naver_process():
     driver.get("http://naver.com/")
@@ -178,24 +198,11 @@ def naver_process():
     NAVER_ID = os.environ.get("NAVER_ID")
     NAVER_PW = os.environ.get("NAVER_PW")
 
-    WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CLASS_NAME, "link_login")))
-
-    # try:
-    #     element = WebDriverWait(driver, 5).until(
-    #         EC.presence_of_element_located((By.CLASS_NAME, 'link_login'))
-    #     )
-    # except:
-    #     driver.quit()
+    WebDriverWait(driver, 20).until(
+        EC.element_to_be_clickable((By.CLASS_NAME, "link_login")))
 
     login_button = driver.find_element(by=By.CLASS_NAME, value="link_login")
     login_button.click()
-
-    # try:
-    #     element = WebDriverWait(driver, 5).until(
-    #         EC.presence_of_element_located((By.ID, 'id'))
-    #     )
-    # except:
-    #     driver.quit()
 
     WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.ID, "id")))
 
@@ -218,7 +225,6 @@ def naver_process():
 
     # current_url = driver.current_url
 
-
     # try:
     #     element = WebDriverWait(driver, 5).until(
     #         EC.presence_of_element_located(
@@ -226,16 +232,15 @@ def naver_process():
     #     )
     # except:
     #     print('실패')
-        # driver.quit()
+    # driver.quit()
 
     # WebDriverWait(driver, 20).until(EC.url_changes(current_url))
-
-    WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CLASS_NAME, "thumb_bd")))
 
     # 블로그
     blog_process()
     # 까페
     cafe_process()
+
 
 def dct_process():
     driver.get("https://dctribe.com/")
@@ -468,8 +473,8 @@ def o_u_process():
     print('오유 업로드 완료')
 
 
-naver_process()
-dct_process()
-o_u_process()
+# naver_process()
+# dct_process()
+# o_u_process()
 hiphople_process()
 driver.quit()
