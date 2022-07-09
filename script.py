@@ -31,11 +31,13 @@ driver = webdriver.Chrome(service=Service(
 driver.implicitly_wait(10)
 load_dotenv(find_dotenv())
 
-ARTIST = 'Ugly Duckling'
-SONG_TITLE = "If Ya Wanna Know"
+WAIT_TIME = 10
+
+ARTIST = 'Kan Kick'
+SONG_TITLE = "The Finer Things"
 YEAR = '2001'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
-FULL_TITLE = f"Take Knowledge's Choice #1945. {ARTIST} - {SONG_TITLE} ({YEAR})"
+FULL_TITLE = f"Take Knowledge's Choice #1965. {ARTIST} - {SONG_TITLE} ({YEAR})"
 split_title = FULL_TITLE.split('.', maxsplit=1)
 # Take Knowledge's Choice #1832
 INDEX_TITLE = split_title[0]
@@ -58,7 +60,7 @@ HTML_CONTENT = ['<br />' if line == '' else "<p>" +
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/iMDRhQ3txG8'
+YOUTUBE_LINK = 'https://youtu.be/cP6ngfebtac'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
@@ -82,25 +84,27 @@ def blog_process():
     # WebDriverWait(driver, 20).until(
     #     EC.frame_to_be_available_and_switch_to_it((By.XPATH, "//*[@id='mainFrame']")))
 
-    time.sleep(5)
+    time.sleep(WAIT_TIME)
     driver.switch_to.frame('mainFrame')
 
     # time.sleep(2)
 
-    # try:
-    #     element = WebDriverWait(driver, 5).until(
-    #         EC.presence_of_element_located((By.CLASS_NAME, 'se-popup-container'))
-    #     )
-    #     popup_cancel_button = driver.find_element(by=By.CLASS_NAME, value='se-popup-button-cancel')
-    #     popup_cancel_button.send_keys(Keys.ENTER)
+    try:
+        element = WebDriverWait(driver, WAIT_TIME).until(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'se-popup-container'))
+        )
+        popup_cancel_button = driver.find_element(
+            by=By.CLASS_NAME, value='se-popup-button-cancel')
+        popup_cancel_button.send_keys(Keys.ENTER)
 
-    # except:
-    #     print('작성중인 글 없음')
+    except:
+        print('작성중인 글 없음')
 
     popup_close_button = driver.find_element(
         by=By.CSS_SELECTOR, value='.se-help-panel-close-button')
     popup_close_button.click()
-    time.sleep(2)
+    time.sleep(WAIT_TIME)
 
     blog_title_field = driver.find_element(
         by=By.XPATH, value='//span[contains(text(),"제목")]')
@@ -118,7 +122,7 @@ def blog_process():
     webdriver.ActionChains(driver=driver).key_down(
         Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
 
-    time.sleep(5)
+    time.sleep(WAIT_TIME)
 
     webdriver.ActionChains(driver=driver).send_keys(CONTENT).perform()
 
@@ -130,7 +134,7 @@ def blog_process():
         by=By.CLASS_NAME, value='confirm_btn__Dv9du')
     posting_confirm_button.click()
 
-    time.sleep(5)
+    time.sleep(WAIT_TIME)
 
     bean_popup = driver.find_element(by=By.ID, value='floatingda_content')
 
@@ -145,7 +149,7 @@ def cafe_process():
         'https://cafe.naver.com/ca-fe/cafes/14371899/menus/571/articles/write?boardType=L')
 
     try:
-        element = WebDriverWait(driver, 5).until(
+        element = WebDriverWait(driver, WAIT_TIME).until(
             EC.presence_of_element_located((By.CLASS_NAME, 'textarea_input'))
         )
     except:
@@ -156,7 +160,7 @@ def cafe_process():
     cafe_title_field.click()
     cafe_title_field.send_keys(FULL_TITLE)
 
-    time.sleep(5)
+    time.sleep(WAIT_TIME)
 
     webdriver.ActionChains(driver=driver).key_down(
         Keys.TAB).key_up(Keys.TAB).perform()
@@ -166,7 +170,7 @@ def cafe_process():
         Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
 
     try:
-        element = WebDriverWait(driver, 7).until(
+        element = WebDriverWait(driver, WAIT_TIME).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'se-section-oembed-video'))
         )
@@ -182,7 +186,7 @@ def cafe_process():
 
     cafe_register_button.click()
 
-    time.sleep(3)
+    time.sleep(WAIT_TIME)
 
     bean_popup = driver.find_element(by=By.ID, value='floatingda_content')
 
@@ -198,13 +202,14 @@ def naver_process():
     NAVER_ID = os.environ.get("NAVER_ID")
     NAVER_PW = os.environ.get("NAVER_PW")
 
-    WebDriverWait(driver, 20).until(
+    WebDriverWait(driver, WAIT_TIME).until(
         EC.element_to_be_clickable((By.CLASS_NAME, "link_login")))
 
     login_button = driver.find_element(by=By.CLASS_NAME, value="link_login")
     login_button.click()
 
-    WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.ID, "id")))
+    WebDriverWait(driver, WAIT_TIME).until(
+        EC.element_to_be_clickable((By.ID, "id")))
 
     id_field = driver.find_element(by=By.ID, value='id')
 
@@ -213,12 +218,12 @@ def naver_process():
     id_field.click()
     pyperclip.copy(NAVER_ID)
     id_field.send_keys(Keys.CONTROL, 'v')
-    time.sleep(2)
+    time.sleep(WAIT_TIME)
 
     pw_field.click()
     pyperclip.copy(NAVER_PW)
     pw_field.send_keys(Keys.CONTROL, 'v')
-    time.sleep(2)
+    time.sleep(WAIT_TIME)
 
     submit_button = driver.find_element(by=By.ID, value="log.login")
     submit_button.click()
@@ -259,7 +264,7 @@ def dct_process():
     login_button.click()
 
     try:
-        element = WebDriverWait(driver, 5).until(
+        element = WebDriverWait(driver, WAIT_TIME).until(
             EC.presence_of_element_located((By.ID, 'account'))
         )
     except:
@@ -295,12 +300,12 @@ def dct_process():
         by=By.XPATH, value='//*[@id="post"]/form/div[8]/input')
     link_field.send_keys(YOUTUBE_LINK)
 
-    time.sleep(2)
+    time.sleep(WAIT_TIME)
 
     upload_button = driver.find_element(by=By.XPATH, value='//*[@id="delete"]')
     upload_button.click()
 
-    time.sleep(2)
+    time.sleep(WAIT_TIME)
 
     print('dct 업로드 완료')
 
@@ -312,7 +317,7 @@ def hiphople_process():
     HIPHOPLE_PW = os.environ.get("HIPHOPLE_PW")
 
     try:
-        element = WebDriverWait(driver, 5).until(
+        element = WebDriverWait(driver, WAIT_TIME).until(
             EC.presence_of_element_located((By.CLASS_NAME, 'tg_btn'))
         )
     except:
@@ -333,7 +338,7 @@ def hiphople_process():
     login_btn.click()
 
     try:
-        element = WebDriverWait(driver, 5).until(
+        element = WebDriverWait(driver, WAIT_TIME).until(
             EC.presence_of_element_located((By.LINK_TEXT, 'LOGOUT'))
         )
     except:
@@ -354,7 +359,7 @@ def hiphople_process():
     category_select.select_by_visible_text("음악")
 
     try:
-        element = WebDriverWait(driver, 5).until(
+        element = WebDriverWait(driver, WAIT_TIME).until(
             EC.presence_of_element_located(
                 (By.XPATH, "//*[@id=\"gap\"]/div/div/form/div[2]/div[2]/input"))
         )
@@ -389,7 +394,7 @@ def hiphople_process():
     reg_btn = driver.find_element(by=By.ID, value='cmd_reg')
     reg_btn.click()
 
-    time.sleep(2)
+    time.sleep(WAIT_TIME)
 
     print('hiphop le 업로드 완료')
 
@@ -397,10 +402,10 @@ def hiphople_process():
 def o_u_process():
     driver.get(url="http://www.todayhumor.co.kr/")
 
-    time.sleep(3)
+    time.sleep(WAIT_TIME)
 
     try:
-        element = WebDriverWait(driver, 5).until(
+        element = WebDriverWait(driver, WAIT_TIME).until(
             EC.presence_of_element_located((By.XPATH, '//*[@id="id"]'))
         )
     except:
@@ -420,7 +425,7 @@ def o_u_process():
     login_button.click()
 
     try:
-        element = WebDriverWait(driver, 5).until(
+        element = WebDriverWait(driver, WAIT_TIME).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//*[@id="login_user_menu"]/span'))
         )
@@ -434,7 +439,7 @@ def o_u_process():
     title_field.send_keys(INDEX_TITLE)
 
     try:
-        element = WebDriverWait(driver, 5).until(
+        element = WebDriverWait(driver, WAIT_TIME).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'cheditor-tab-code-off'))
         )
@@ -447,7 +452,7 @@ def o_u_process():
     frame_change_to_html_button.click()
 
     try:
-        element = WebDriverWait(driver, 5).until(
+        element = WebDriverWait(driver, WAIT_TIME).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'cheditor-editarea-text-content'))
         )
@@ -468,13 +473,13 @@ def o_u_process():
         by=By.XPATH, value='//*[@id="write_form"]/table/tbody/tr[2]/td/table/tbody/tr[8]/td/div/input')
     submit_button.click()
 
-    time.sleep(2)
+    time.sleep(WAIT_TIME)
 
     print('오유 업로드 완료')
 
 
-# naver_process()
-# dct_process()
-# o_u_process()
+naver_process()
+dct_process()
+o_u_process()
 hiphople_process()
 driver.quit()
