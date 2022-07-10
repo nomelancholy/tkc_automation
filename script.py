@@ -31,21 +31,31 @@ driver = webdriver.Chrome(service=Service(
 driver.implicitly_wait(10)
 load_dotenv(find_dotenv())
 
-WAIT_TIME = 10
+# good condition : 3~5 / bad condition : 7~10
+WAIT_TIME = 7
 
-ARTIST = 'Kan Kick'
-SONG_TITLE = "The Finer Things"
+ARTIST = 'Lone Catalysts'
+SONG_TITLE = "Ayanna Monet"
 YEAR = '2001'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
-FULL_TITLE = f"Take Knowledge's Choice #1965. {ARTIST} - {SONG_TITLE} ({YEAR})"
+FULL_TITLE = f"Take Knowledge's Choice #1966. {ARTIST} - {SONG_TITLE} ({YEAR})"
+
+# audio | video
+LINK_TYPE = 'audio'
+
+YOUTUBE_LINK = 'https://youtu.be/UIDEHgEC26I'
+IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
+    '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+
+
+FEATURING = ''
+FEATURING_MESSAGE = '가 피쳐링한'
+
 split_title = FULL_TITLE.split('.', maxsplit=1)
 # Take Knowledge's Choice #1832
 INDEX_TITLE = split_title[0]
 # J. Rawls - Blue #2 (2001)
 TITLE = split_title[1].lstrip()
-
-FEATURING = ''
-FEATURING_MESSAGE = '가 피쳐링한'
 
 CONTENT = f"{ARTIST}의 {YEAR}년 작 \n {SONG_TITLE}입니다 \n \n 즐감하세요! \n \n"
 
@@ -57,12 +67,6 @@ if FEATURING:
 split_content = (CONTENT + GUIDE).split('\n')
 HTML_CONTENT = ['<br />' if line == '' else "<p>" +
                 line+"</p>" for line in split_content]
-# audio | video
-LINK_TYPE = 'audio'
-
-YOUTUBE_LINK = 'https://youtu.be/cP6ngfebtac'
-IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
-    '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
 
 def blog_process():
