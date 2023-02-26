@@ -32,22 +32,22 @@ driver.implicitly_wait(10)
 load_dotenv(find_dotenv())
 
 # good condition : 3~5 / bad condition : 7~10
-WAIT_TIME = 7
+WAIT_TIME = 5
 
-ARTIST = 'Tech N9ne'
-SONG_TITLE = "Tormented"
+ARTIST = 'P. Diddy And The Bad Boy Family'
+SONG_TITLE = "The Last Song"
 YEAR = '2001'
-COUNT = '2033'
+COUNT = '2130'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
 FULL_TITLE = f"Take Knowledge's Choice #{COUNT}. {ARTIST} - {SONG_TITLE} ({YEAR})"
 
-FEATURING = "Grant Rice"
-FEATURING_MESSAGE = '가 피쳐링한'
+FEATURING = ""
+FEATURING_MESSAGE = '이 피쳐링한'
 
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/owYZf5OBR8Q'
+YOUTUBE_LINK = 'https://youtu.be/4jNeCEMLXj4'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
@@ -164,11 +164,22 @@ def cafe_process():
     cafe_title_field.send_keys(FULL_TITLE)
 
     time.sleep(WAIT_TIME)
-
+    # 엔터를 한번 쳐줘야 하나..?
+    
     webdriver.ActionChains(driver=driver).key_down(
         Keys.TAB).key_up(Keys.TAB).perform()
 
+    time.sleep(WAIT_TIME)
+
+    webdriver.ActionChains(driver=driver).key_down(Keys.ENTER).key_up(Keys.ENTER).perform()
+
+    # webdriver.ActionChains(driver=driver).key_down(
+    #     Keys.TAB).key_up(Keys.TAB).perform()
+
+    # time.sleep(WAIT_TIME)
+
     pyperclip.copy(YOUTUBE_LINK)
+
     webdriver.ActionChains(driver=driver).key_down(
         Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
 
@@ -325,28 +336,28 @@ def hiphople_process():
 
     try:
         element = WebDriverWait(driver, WAIT_TIME).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'tg_btn'))
+            EC.presence_of_element_located((By.CLASS_NAME, 'app-header__login'))
         )
     except:
         # driver.quit()
         print('실패')
 
-    popup_load_btn = driver.find_element(by=By.CLASS_NAME, value='tg_btn')
+    popup_load_btn = driver.find_element(by=By.CLASS_NAME, value='app-header__login')
 
     popup_load_btn.click()
 
-    id_field = driver.find_element(by=By.ID, value="uid")
+    id_field = driver.find_element(by=By.XPATH, value='//*[@id="app-login-form"]/div[1]/div/div[2]/form/input[7]')
     id_field.send_keys(HIPHOPLE_ID)
 
-    pw_field = driver.find_element(by=By.ID, value="upw")
+    pw_field = driver.find_element(by=By.XPATH, value='//*[@id="app-login-form"]/div[1]/div/div[2]/form/input[8]')
     pw_field.send_keys(HIPHOPLE_PW)
 
-    login_btn = driver.find_element(by=By.CLASS_NAME, value='login_btn')
+    login_btn = driver.find_element(by=By.XPATH, value='//*[@id="app-login-form"]/div[1]/div/div[2]/form/button')
     login_btn.click()
 
     try:
         element = WebDriverWait(driver, WAIT_TIME).until(
-            EC.presence_of_element_located((By.LINK_TEXT, 'LOGOUT'))
+            EC.presence_of_element_located((By.CLASS_NAME, 'app-header-profile'))
         )
     except:
         # driver.quit()
@@ -368,14 +379,14 @@ def hiphople_process():
     try:
         element = WebDriverWait(driver, WAIT_TIME).until(
             EC.presence_of_element_located(
-                (By.XPATH, "//*[@id=\"gap\"]/div/div/form/div[2]/div[2]/input"))
+                (By.CLASS_NAME, "wf-input"))
         )
     except:
         # driver.quit()
         print('실패')
 
     title_field = driver.find_element(
-        by=By.XPATH, value="//*[@id=\"gap\"]/div/div/form/div[2]/div[2]/input")
+        by=By.CLASS_NAME, value="wf-input")
     title_field.send_keys(FULL_TITLE)
 
     html_code_button = driver.find_element(by=By.ID, value='cke_40')
@@ -485,8 +496,8 @@ def o_u_process():
     print('오유 업로드 완료')
 
 
-naver_process()
-dct_process()
-o_u_process()
+# naver_process()
+# dct_process()
+# o_u_process()
 hiphople_process()
 driver.quit()
