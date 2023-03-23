@@ -34,20 +34,20 @@ load_dotenv(find_dotenv())
 # good condition : 3~5 / bad condition : 7~10
 WAIT_TIME = 5
 
-ARTIST = "Non Phixion"
-SONG_TITLE = "Drug Music"
+ARTIST = "Ja Rule"
+SONG_TITLE = "Thug Lovin'"
 YEAR = '2002'
-COUNT = '2156'
+COUNT = '2157'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
 FULL_TITLE = f"Take Knowledge's Choice #{COUNT}. {ARTIST} - {SONG_TITLE} ({YEAR})"
 
-FEATURING = ""
-FEATURING_MESSAGE = '가 피쳐링한'
+FEATURING = "Bobby Brown"
+FEATURING_MESSAGE = '이 피쳐링한'
 
 # audio | video
-LINK_TYPE = 'audio'
+LINK_TYPE = 'video'
 
-YOUTUBE_LINK = 'https://youtu.be/Uy2Pd0Ads2Y'
+YOUTUBE_LINK = 'https://youtu.be/b5NXlIlygts'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
