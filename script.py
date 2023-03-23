@@ -34,20 +34,20 @@ load_dotenv(find_dotenv())
 # good condition : 3~5 / bad condition : 7~10
 WAIT_TIME = 5
 
-ARTIST = 'P. Diddy And The Bad Boy Family'
-SONG_TITLE = "The Last Song"
-YEAR = '2001'
-COUNT = '2130'
+ARTIST = "Non Phixion"
+SONG_TITLE = "Drug Music"
+YEAR = '2002'
+COUNT = '2156'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
 FULL_TITLE = f"Take Knowledge's Choice #{COUNT}. {ARTIST} - {SONG_TITLE} ({YEAR})"
 
 FEATURING = ""
-FEATURING_MESSAGE = '이 피쳐링한'
+FEATURING_MESSAGE = '가 피쳐링한'
 
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/4jNeCEMLXj4'
+YOUTUBE_LINK = 'https://youtu.be/Uy2Pd0Ads2Y'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
@@ -124,6 +124,8 @@ def blog_process():
     pyperclip.copy(YOUTUBE_LINK)
     webdriver.ActionChains(driver=driver).key_down(
         Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
+
+    time.sleep(WAIT_TIME)
 
     time.sleep(WAIT_TIME)
 
@@ -346,6 +348,14 @@ def hiphople_process():
 
     popup_load_btn.click()
 
+    try:
+        element = WebDriverWait(driver, WAIT_TIME).until(
+            EC.presence_of_element_located((By.XPATH, '//*[@id="app-login-form"]/div[1]/div/div[2]/form/input[7]'))
+        )
+    except:
+        # driver.quit()
+        print('실패')
+
     id_field = driver.find_element(by=By.XPATH, value='//*[@id="app-login-form"]/div[1]/div/div[2]/form/input[7]')
     id_field.send_keys(HIPHOPLE_ID)
 
@@ -496,8 +506,8 @@ def o_u_process():
     print('오유 업로드 완료')
 
 
-# naver_process()
-# dct_process()
-# o_u_process()
+naver_process()
+dct_process()
+o_u_process()
 hiphople_process()
 driver.quit()
