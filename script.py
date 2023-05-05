@@ -26,28 +26,27 @@ options.add_argument("--window-size=1920x1080")
 # To - Do : time.sleep 들 다 특정 엘리먼트가 나오면 실행되게 변경 필요
 
 
-driver = webdriver.Chrome(service=Service(
-    ChromeDriverManager().install()), options=options)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 driver.implicitly_wait(10)
 load_dotenv(find_dotenv())
 
 # good condition : 3~5 / bad condition : 7~10
 WAIT_TIME = 5
 
-ARTIST = "Ja Rule"
-SONG_TITLE = "Thug Lovin'"
+ARTIST = "Jedi Mind Tricks"
+SONG_TITLE = "The Apostle's Creed"
 YEAR = '2002'
-COUNT = '2157'
+COUNT = '2194'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
 FULL_TITLE = f"Take Knowledge's Choice #{COUNT}. {ARTIST} - {SONG_TITLE} ({YEAR})"
 
-FEATURING = "Bobby Brown"
-FEATURING_MESSAGE = '이 피쳐링한'
+FEATURING = ""
+FEATURING_MESSAGE = '가 피쳐링한'
 
 # audio | video
-LINK_TYPE = 'video'
+LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/b5NXlIlygts'
+YOUTUBE_LINK = 'https://youtu.be/YG-XrlclISs'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
