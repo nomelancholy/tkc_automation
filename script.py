@@ -33,20 +33,20 @@ load_dotenv(find_dotenv())
 # good condition : 3~5 / bad condition : 7~10
 WAIT_TIME = 5
 
-ARTIST = "Jedi Mind Tricks"
-SONG_TITLE = "The Apostle's Creed"
+ARTIST = "Insight"
+SONG_TITLE = "Music Lover"
 YEAR = '2002'
-COUNT = '2194'
+COUNT = '2204'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
 FULL_TITLE = f"Take Knowledge's Choice #{COUNT}. {ARTIST} - {SONG_TITLE} ({YEAR})"
 
 FEATURING = ""
-FEATURING_MESSAGE = '가 피쳐링한'
+FEATURING_MESSAGE = '이 피쳐링한'
 
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/YG-XrlclISs'
+YOUTUBE_LINK = 'https://youtu.be/ulBgNDgpaVc'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
@@ -214,15 +214,15 @@ def cafe_process():
 
 
 def naver_process():
-    driver.get("http://naver.com/")
+    driver.get("https://naver.com")
 
     NAVER_ID = os.environ.get("NAVER_ID")
     NAVER_PW = os.environ.get("NAVER_PW")
 
     WebDriverWait(driver, WAIT_TIME).until(
-        EC.element_to_be_clickable((By.CLASS_NAME, "link_login")))
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="right-content-area"]/div[1]/div[1]/div/a')))
 
-    login_button = driver.find_element(by=By.CLASS_NAME, value="link_login")
+    login_button = driver.find_element(by=By.XPATH, value= '//*[@id="right-content-area"]/div[1]/div[1]/div/a')
     login_button.click()
 
     WebDriverWait(driver, WAIT_TIME).until(
@@ -507,6 +507,6 @@ def o_u_process():
 
 naver_process()
 dct_process()
-o_u_process()
+# o_u_process() 정신병자들 득실한 곳에 그만 올리자
 hiphople_process()
 driver.quit()
