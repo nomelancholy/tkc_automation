@@ -7,13 +7,10 @@ from dotenv import load_dotenv, find_dotenv
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.action_chains import ActionChains
-from webdriver_manager.chrome import ChromeDriverManager
 
 # chrome driver setup
 
@@ -26,27 +23,27 @@ options.add_argument("--window-size=1920x1080")
 # To - Do : time.sleep 들 다 특정 엘리먼트가 나오면 실행되게 변경 필요
 
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+driver = webdriver.Chrome()
 driver.implicitly_wait(10)
 load_dotenv(find_dotenv())
 
 # good condition : 3~5 / bad condition : 7~10
 WAIT_TIME = 5
 
-ARTIST = "Erick Sermon"
-SONG_TITLE = "Don't Give Up"
+ARTIST = "Talib Kweli"
+SONG_TITLE = "Put it in the air"
 YEAR = '2002'
-COUNT = '2252'
+COUNT = '2263'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
 FULL_TITLE = f"Take Knowledge's Choice #{COUNT}. {ARTIST} - {SONG_TITLE} ({YEAR})"
 
-FEATURING = "Lyric"
+FEATURING = "DJ Quick"
 FEATURING_MESSAGE = '이 피쳐링한'
 
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/RpBc1yQDmA0'
+YOUTUBE_LINK = 'https://youtu.be/0uN7yMC9QFE'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
@@ -507,6 +504,5 @@ def o_u_process():
 
 naver_process()
 dct_process()
-# o_u_process() 여기 그만 올리자..
 hiphople_process()
 driver.quit()
