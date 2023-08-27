@@ -30,20 +30,20 @@ load_dotenv(find_dotenv())
 # good condition : 3~5 / bad condition : 7~10
 WAIT_TIME = 5
 
-ARTIST = "Talib Kweli"
-SONG_TITLE = "Put it in the air"
+ARTIST = "E-40"
+SONG_TITLE = "Till The Dawn"
 YEAR = '2002'
-COUNT = '2263'
+COUNT = '2287'
 # Take Knowledge's Choice #1832. J. Rawls - Blue #2 (2001) \
 FULL_TITLE = f"Take Knowledge's Choice #{COUNT}. {ARTIST} - {SONG_TITLE} ({YEAR})"
 
-FEATURING = "DJ Quick"
-FEATURING_MESSAGE = '이 피쳐링한'
+FEATURING = "Bosko, Suga Free"
+FEATURING_MESSAGE = '가 피쳐링한'
 
 # audio | video
 LINK_TYPE = 'audio'
 
-YOUTUBE_LINK = 'https://youtu.be/0uN7yMC9QFE'
+YOUTUBE_LINK = 'https://youtu.be/hW07CYX7up8?si=6DwRaxuZdi6UJVYv'
 IFRAME_LINK = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+YOUTUBE_LINK.split(
     '/')[3]+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 
@@ -308,7 +308,7 @@ def dct_process():
     driver.switch_to.frame(iframe)
 
     editor = driver.find_element(by=By.XPATH, value='/html/body')
-    editor.send_keys(CONTENT + GUIDE)
+    editor.send_keys(CONTENT + YOUTUBE_LINK + GUIDE)
 
     driver.switch_to.default_content()
 
